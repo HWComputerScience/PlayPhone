@@ -16,28 +16,8 @@ using namespace playphone;
 
 void playphone::sendMsg(TCPSocket* sock, Serializable& r){
     const char* msg = r.getJSONString();
-    int len = strlen(msg);
-    
-    char head[2];
-    head[0] = len%255;
-    head[1] = len/255;
-    sock->send(head, 2);
-    sock->send(msg, len);
-}
-
-string playphone::recvMsg(TCPSocket* sock){
-    string msg;
-    char buf[BUFFER_LENGTH];
-    if(sock->recv(buf, 2)<=0)return "";
-    int len = buf[0]+buf[1]*255;
-    int curBytes = 0;
-    while(curBytes<len){
-        int amt = sock->recv(buf, min(BUFFER_LENGTH,len-curBytes));
-        if(amt<=0)return "";
-        msg.append(buf, amt);
-        curBytes += amt;
-    }
-    return msg;
+    int len = (int)strlen(msg);
+    sock->send(msg, len+1);
 }
 
 Server::Server(){
@@ -130,29 +110,45 @@ void Client::send(playphone::Serializable &s){
     sendMsg(sock, s);
 }
 
+void Client::handleMsg(string &in){
+    if(in==""){
+        //client disconnected
+        return;
+    }
+    printf("server received: %s\n", in.c_str());
+    
+    Request req;
+    Response resp;
+    if(req.parseJSON(in.c_str())){
+        Response resp = serv->handleRequest(req, this);
+        sendMsg(sock, resp);
+    }else if(resp.parseJSON(in.c_str())){
+        serv->handleResponse(resp, this);
+    }else{
+        Response resp(404,"bad json");
+        sendMsg(sock, resp);
+    }
+}
+
 void Client::run(){
     //TODO: confirm buffer length
-    char input[BUFFER_LENGTH];
+    char buf[BUFFER_LENGTH];
+    string msg;
     
     while (shouldRun) {
-        string in = recvMsg(sock);
-        if(in==""){
-            //client disconnected
-            break;
-        }
-        printf("server received: %s\n", in.c_str());
+        int amt = sock->recv(buf, BUFFER_LENGTH-1);
+        buf[amt] = 0;
         
-        Request req;
-        Response resp;
-        if(req.parseJSON(in.c_str())){
-            Response resp = serv->handleRequest(req, this);
-            sendMsg(sock, resp);
-        }else if(resp.parseJSON(in.c_str())){
-            serv->handleResponse(resp, this);
-        }else{
-            Response resp(404,"bad json");
-            sendMsg(sock, resp);
-        }
+        int bytesProcessed = 0;
+        do {
+            int len = (int)strlen(buf+bytesProcessed);
+            msg.append(buf+bytesProcessed, len);
+            if(bytesProcessed+len<amt){
+                handleMsg(msg);
+                msg = "";
+            }
+            bytesProcessed+=len+1;
+        } while (bytesProcessed<amt);
     }
     printf("client disconnected\n");
     serv->clients.erase(serv->clients.find(clientID));

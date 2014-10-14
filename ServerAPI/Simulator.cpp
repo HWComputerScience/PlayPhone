@@ -51,9 +51,9 @@ void sendResponse1(){
 }
 
 void getResponse(){
-    string r = recvMsg(sock);
-    if(r=="")return;
-    printf("simulator: %s\n", r.c_str());
+//    string r = recvMsg(sock);
+//    if(r=="")return;
+//    printf("simulator: %s\n", r.c_str());
 }
 
 void simulate(){
