@@ -24,7 +24,6 @@ namespace playphone {
     class Response;
     
     void sendMsg(TCPSocket* sock, Serializable& r);
-    string recvMsg(TCPSocket* sock);
     
     class Client {
         
@@ -38,7 +37,7 @@ namespace playphone {
         void send(Serializable &s);
         void run();
     private:
-        
+        void handleMsg(string& msg);
     };
     
     class Server {
