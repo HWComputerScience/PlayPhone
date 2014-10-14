@@ -84,5 +84,6 @@ Response:
         "code":#,
         "msg":<string>
     },
-    "accepted"
+    "accepted":<boolean>
+    "padconfig":<padconfig>
 }
