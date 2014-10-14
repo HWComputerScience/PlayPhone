@@ -87,3 +87,38 @@ Response:
     "accepted":<boolean>
     "padconfig":<padconfig>
 }
+
+Operation 3: Disconnect
+Request: 
+{
+    "op":3
+    "ts":#
+    "msg":<String>
+}
+Response:
+std
+
+Operation 4: Update padconfig
+Request:
+{
+    "op":4
+    "ts":#
+    "padconfig":<padconfig>
+}
+Response:
+std
+
+Operation 5: Pad State Change
+Request:
+{
+    "op":5
+    "ts":#
+    "controlid":#
+    "action":0,1,2
+    "position": {
+        "x":#
+        "y":#
+    }
+}
+Response:
+std
