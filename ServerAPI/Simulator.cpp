@@ -8,52 +8,78 @@
 
 #include "Simulator.h"
 #include "PlayPhone.h"
-#include "PracticalSocket.h"
 #include "rapidjson.h"
 #include "document.h"
 #include "writer.h"
 
 #include <unistd.h>
+#include <thread>
+#include <iostream>
 
 using namespace playphone;
 
 TCPSocket *sock;
 char buf[1024];
-
-class myextra : public Serializable{
-    
-public:
-    void serializeJSON(Writer<StringBuffer> &w){
-        w.Key("extra");
-        w.StartObject();
-        w.Key("score");
-        w.Int(1000);
-        w.EndObject();
-    }
-};
-
-void sendInfoRequest(){
-    using namespace rapidjson;
-    Request req(0);
-    myextra m;
-    req.addExtra(&m);
-    sendMsg(sock, req);
-}
+mutex mut;
 
 void sendBadRequest(){
     Request r;
     sendMsg(sock, r);
 }
 
-void sendResponse1(){
-    Response r(200, "OK");
+void sendDiscovReq(){
+    Request r(0);
+    IDObject id;
+    id.firstname = "James";
+    id.lastname = "Lennon";
+    id.username = "j_lennon";
+    Document d;
+    Value& obj = r.serializeJSON(d.GetAllocator());
+    Value& idval = id.serializeJSON(d.GetAllocator());
+    obj.AddMember("id", idval, d.GetAllocator());
+    obj.AddMember("APIVersion", 1, d.GetAllocator());
+    
     sendMsg(sock, r);
 }
 
-void getResponse(){
-//    string r = recvMsg(sock);
-//    if(r=="")return;
-//    printf("simulator: %s\n", r.c_str());
+void sendGameReq(){
+    Request r(1);
+    GameObject game;
+    game.name = "WOW";
+    game.desc = "blah blah blah";
+    Document d;
+    Value& obj = r.serializeJSON(d.GetAllocator());
+    Value& gval = game.serializeJSON(d.GetAllocator());
+    obj.AddMember("game", gval, d.GetAllocator());
+    
+    sendMsg(sock, r);
+    
+}
+
+void handle(const char* msg, int len){
+    mut.lock();
+    cout << "simulator got: " << msg << endl;
+    mut.unlock();
+}
+
+void getResponses(){
+    string msg;
+    while (true) {
+        int amt = sock->recv(buf, BUFFER_LENGTH-1);
+        buf[amt] = 0;
+        
+        int bytesProcessed = 0;
+        do {
+            int len = (int)strlen(buf+bytesProcessed);
+            msg.append(buf+bytesProcessed, len);
+            if(bytesProcessed+len<amt){
+                handle(msg.c_str(), msg.length());
+                msg = "";
+            }
+            bytesProcessed+=len+1;
+        } while (bytesProcessed<amt);
+    }
+
 }
 
 void simulate(){
@@ -69,12 +95,11 @@ void simulate(){
     }
     printf("Simulator connected on port %d\n", currentPort);
     
-    sendBadRequest();
-    getResponse();
-    sendInfoRequest();
-    getResponse();
+    thread t(getResponses);
+    t.detach();
     
-    sendResponse1();
+    sendDiscovReq();
+    sendGameReq();
     
     sleep(200);
 }

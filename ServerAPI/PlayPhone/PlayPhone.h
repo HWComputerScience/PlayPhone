@@ -11,6 +11,7 @@
 
 #include "Server.h"
 #include "Request.h"
+#include "ServerHandler.h"
 
 #define PP_DEBUG true
 #define BUFFER_LENGTH 1024

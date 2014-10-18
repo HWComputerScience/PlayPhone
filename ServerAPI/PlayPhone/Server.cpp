@@ -20,7 +20,7 @@ void playphone::sendMsg(TCPSocket* sock, Serializable& r){
     sock->send(msg, len+1);
 }
 
-Server::Server(){
+Server::Server(ServerHandler& handler): handler(handler){
     currentClientID = 0;
     this->shouldRun = true;
 }
@@ -65,7 +65,7 @@ int Server::getClientID(){
 
 void Server::handleClient(TCPSocket* sock){
     Client cli(sock, getClientID(), this);
-    clients.insert(std::pair<int,Client&>(cli.clientID, cli));
+    clients.insert(std::pair<int,Client&>(cli.socketID, cli));
     cli.run();
 }
 
@@ -86,12 +86,37 @@ void Server::broadcast(Serializable &s, int except){
     }
 }
 
+Response error(const char* text){return Response(404, text);}
+
 Response Server::handleRequest(playphone::Request &r, Client* cli){
     //handle requests here
-    printf("received operation %d\n", r.operation);
     
-    Response resp(200, "OK");
-    return resp;
+    if(r.operation==0){
+        Value& cid = (*r.root)["id"];
+        IDObject idobj;
+        if(!idobj.parseJSON(cid))return error("bad id json");
+        Response resp(200, "OK");
+        GameObject gobj;
+        gobj.name = handler.getName();
+        gobj.desc = handler.getDesc();
+        
+        Document d;
+        Value& obj = resp.serializeJSON(d.GetAllocator());
+        Value& game = gobj.serializeJSON(d.GetAllocator());
+        obj.AddMember("game", game, d.GetAllocator());
+        
+        return resp;
+    }else if(r.operation==1){
+        Value& cid = (*r.root)["game"];
+        GameObject gobj;
+        if(!gobj.parseJSON(cid))return error("bad game json");
+        char buf[20];
+        sprintf(buf, "welcome to %s", gobj.name.c_str());
+        Response resp(200, buf);
+        return resp;
+    }
+    
+    return error("unknown op");
 }
 
 void Server::handleResponse(playphone::Response &r, Client* cli){
@@ -100,7 +125,7 @@ void Server::handleResponse(playphone::Response &r, Client* cli){
 }
 
 Client::Client(TCPSocket* sock, int id, Server* serv){
-    this->clientID = id;
+    this->socketID = id;
     this->sock = sock;
     this->serv = serv;
     shouldRun = true;
@@ -110,7 +135,7 @@ void Client::send(playphone::Serializable &s){
     sendMsg(sock, s);
 }
 
-void Client::handleMsg(string &in){
+void Client::handleMsg(string in){
     if(in==""){
         //client disconnected
         return;
@@ -151,7 +176,7 @@ void Client::run(){
         } while (bytesProcessed<amt);
     }
     printf("client disconnected\n");
-    serv->clients.erase(serv->clients.find(clientID));
+    serv->clients.erase(serv->clients.find(socketID));
     delete sock;
     sock=NULL;
 }
