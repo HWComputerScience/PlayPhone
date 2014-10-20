@@ -266,6 +266,7 @@ using std::size_t;
 */
 #ifndef RAPIDJSON_ASSERT
 #include <cassert>
+#include <exception>
 #define RAPIDJSON_ASSERT(x) assert(x)
 #endif // RAPIDJSON_ASSERT
 

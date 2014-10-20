@@ -22,23 +22,25 @@ namespace playphone {
     class Serializable;
     class Request;
     class Response;
+    class ServerHandler;
+//    class IDObject;
     
     void sendMsg(TCPSocket* sock, Serializable& r);
-    string recvMsg(TCPSocket* sock);
     
     class Client {
         
     public:
-        int clientID;
+        int socketID;
         TCPSocket* sock;
         Server* serv;
         bool shouldRun;
+//        IDObject* clientID:
         
-        Client(TCPSocket* sock, int id, Server* serv);
+        Client(TCPSocket* sock, int sockID, Server* serv);
         void send(Serializable &s);
         void run();
     private:
-        
+        void handleMsg(string msg);
     };
     
     class Server {
@@ -48,7 +50,7 @@ namespace playphone {
         map<int, Client&> clients;
         bool shouldRun;
         
-        Server();
+        Server(ServerHandler& handler);
         void start();
         void broadcast(Serializable &s, int except=-1);
         bool send(Serializable& s, int clientID);
@@ -56,6 +58,7 @@ namespace playphone {
         void handleResponse(Response& r, Client* cli);
     private:
         mutex mut;
+        ServerHandler& handler;
         
         int getClientID();
         void handleClient(TCPSocket* sock);

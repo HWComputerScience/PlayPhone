@@ -12,10 +12,23 @@ using namespace rapidjson;
 using namespace std;
 using namespace playphone;
 
+const char* playphone::getStringFromJSON(Value& v){
+    StringBuffer out;
+    Writer<StringBuffer> writer(out);
+    v.Accept(writer);
+    
+    return out.GetString();
+}
+
 const char* Serializable::getJSONString(){
     StringBuffer out;
     Writer<StringBuffer> writer(out);
-    this->serializeJSON(writer);
+    if(!hasSerialized){
+        Document d;
+        this->serializeJSON(d.GetAllocator());
+        hasSerialized = true;
+    }
+    JSONvalue.Accept(writer);
     
     return out.GetString();
 }
@@ -29,22 +42,12 @@ Request::Request(int op){
     this->operation = op;
 }
 
-void Request::addExtra(playphone::Serializable* val){
-    extras.push_back(val);
-}
-
-void Request::serializeJSON(Writer<StringBuffer>& w){
-    w.StartObject();
-    w.Key("op");
-    w.Int(operation);
-    w.Key("ts");
-    w.Int((int)time(0));
-    
-    for (int i=0; i<extras.size(); i++) {
-        extras[i]->serializeJSON(w);
-    }
-    
-    w.EndObject();
+Value& Request::serializeJSON(Document::AllocatorType& a){
+    hasSerialized = true;
+    JSONvalue.SetObject();
+    JSONvalue.AddMember("op", operation, a);
+    JSONvalue.AddMember("ts", (int)time(0), a);
+    return JSONvalue;
 }
 
 bool Request::parseJSON(const char *json){
@@ -61,13 +64,10 @@ bool Request::parseJSON(const char *json){
 
 Response::Response(){
     statusCode = -1;
-    statusText = NULL;
 }
 
-Response::Response(int code, const char* text){
+Response::Response(int code, const char* text): statusMsg(text), statusCode(code){
     Response();
-    statusText = text;
-    statusCode = code;
 }
 
 bool Response::parseJSON(const char *json){
@@ -80,20 +80,76 @@ bool Response::parseJSON(const char *json){
     if(!sts.HasMember("code"))return false;
     if(!sts.HasMember("text"))return false;
     statusCode = sts["code"].GetInt();
-    statusText = sts["text"].GetString();
+    statusMsg = sts["msg"].GetString();
     return true;
 }
 
-void Response::serializeJSON(Writer<StringBuffer> &w){
-    w.StartObject();
-    w.Key("sts");
+Value& Response::serializeJSON(Document::AllocatorType &a){
+    hasSerialized = true;
+    Value sts;
+    JSONvalue.SetObject();
     
-    w.StartObject();
-    w.Key("code");
-    w.Int(statusCode);
-    w.Key("text");
-    w.String(statusText);
-    w.EndObject();
+    sts.SetObject();
+    sts.AddMember("code", statusCode, a);
+    sts.AddMember("msg", statusMsg, a);
     
-    w.EndObject();
+    JSONvalue.AddMember("sts", sts, a);
+    return JSONvalue;
+}
+
+IDObject::IDObject(): phoneid(""), firstname(""), lastname(""), username(""),fbuid("") {}
+
+Value& IDObject::serializeJSON(Document::AllocatorType &a){
+    hasSerialized = true;
+    JSONvalue.SetObject();
+    JSONvalue.AddMember("phoneID", phoneid, a);
+    JSONvalue.AddMember("firstname", firstname, a);
+    JSONvalue.AddMember("lastname", lastname, a);
+    JSONvalue.AddMember("username", username, a);
+    JSONvalue.AddMember("fbuid", fbuid, a);
+    
+    return JSONvalue;
+}
+
+bool IDObject::parseJSON(Value& v){
+    if(!v.HasMember("phoneID")&&v["phoneid"].IsString())return false;
+    if(!v.HasMember("firstname")&&v["phoneid"].IsString())return false;
+    if(!v.HasMember("lastname")&&v["phoneid"].IsString())return false;
+    if(!v.HasMember("username")&&v["phoneid"].IsString())return false;
+    if(!v.HasMember("fbuid")&&v["phoneid"].IsString())return false;
+    
+    phoneid = v["phoneID"].GetString();
+    firstname = v["firstname"].GetString();
+    lastname = v["lastname"].GetString();
+    fbuid = v["fbuid"].GetString();
+    username = v["username"].GetString();
+    return true;
+}
+
+GameObject::GameObject():openslots(0),filledslots(0){}
+
+Value& GameObject::serializeJSON(Document::AllocatorType &a){
+    hasSerialized = true;
+    JSONvalue.SetObject();
+    JSONvalue.AddMember("name", name, a);
+    JSONvalue.AddMember("openslots", openslots, a);
+    JSONvalue.AddMember("filledslots", filledslots, a);
+    JSONvalue.AddMember("icon", icon, a);
+    JSONvalue.AddMember("desc", desc, a);
+    
+    return JSONvalue;
+}
+
+bool GameObject::parseJSON(Value &v){
+    try {
+        name = v["name"].GetString();
+        openslots = v["openslots"].GetInt();
+        filledslots = v["filledslots"].GetInt();
+        icon = v["icon"].GetString();
+        desc = v["desc"].GetString();
+        
+        return true;
+    } catch (exception e) {
+        return false;
+    }
 }

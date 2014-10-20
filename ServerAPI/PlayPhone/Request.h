@@ -6,18 +6,22 @@
 #include "PlayPhone.h"
 #include "writer.h"
 #include "document.h"
-#include <vector>
 
 using namespace rapidjson;
 using namespace std;
 
 namespace playphone {
     
+    const char* getStringFromJSON(Value& v);
+    
     class Serializable {
         
     public:
-        virtual void serializeJSON(Writer<StringBuffer>& w)=0;
+        virtual Value& serializeJSON(Document::AllocatorType& a)=0;
         const char* getJSONString();
+        
+        Value JSONvalue;
+        bool hasSerialized=false;
     };
     
     class Request : public Serializable{
@@ -30,23 +34,54 @@ namespace playphone {
         Request();
         Request(int op);
         bool parseJSON(const char* json);
-        void addExtra(Serializable* val);
-        void serializeJSON(Writer<StringBuffer>& w);
+        Value& serializeJSON(Document::AllocatorType& a);
     private:
-        vector<Serializable*> extras;
     };
     
     class Response : public Serializable{
         
     public:
         int statusCode;
-        const char* statusText;
+        string statusMsg;
         Document* root;
         
         Response();
         Response(int code, const char* text);
         bool parseJSON(const char* json);
-        void serializeJSON(Writer<StringBuffer>& w);
+        Value& serializeJSON(Document::AllocatorType& a);
+    private:
+    };
+    
+    class IDObject : public Serializable{
+    public:
+        IDObject();
+        Value& serializeJSON(Document::AllocatorType& a);
+        bool parseJSON(Value& v);
+        
+        string phoneid;
+        string firstname;
+        string lastname;
+        string username;
+        string fbuid;
+    };
+    
+    class GameObject : public Serializable{
+    public:
+        GameObject();
+        Value& serializeJSON(Document::AllocatorType& a);
+        bool parseJSON(Value& v);
+        
+        string name;
+        int openslots, filledslots;
+        string icon, desc;
+    };
+    
+    class FrameObject : public Serializable{
+    public:
+        Value& serializeJSON(Document::AllocatorType& a);
+        bool parseJSON(Value& v);
+        
+        int x,y,w,h;
     };
 }
 #endif

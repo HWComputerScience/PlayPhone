@@ -11,9 +11,10 @@
 
 #include "Server.h"
 #include "Request.h"
+#include "ServerHandler.h"
 
 #define PP_DEBUG true
-#define BUFFER_LENGTH 1
+#define BUFFER_LENGTH 1024
 #define START_PORT 47810
 
 #endif

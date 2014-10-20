@@ -27,6 +27,7 @@
 #include "internal/meta.h"
 #include "internal/strfunc.h"
 #include <new>      // placement new
+#include <typeinfo>
 
 #ifdef _MSC_VER
 RAPIDJSON_DIAG_PUSH
@@ -817,7 +818,9 @@ public:
         if (member != MemberEnd())
             return member->value;
         else {
-            RAPIDJSON_ASSERT(false);    // see above note
+            //RAPIDJSON_ASSERT(false);    // see above note
+            std::exception e;
+            throw e;
             static GenericValue NullValue;
             return NullValue;
         }
@@ -903,7 +906,7 @@ public:
         return member;
     }
     template <typename SourceAllocator> ConstMemberIterator FindMember(const GenericValue<Encoding, SourceAllocator>& name) const { return const_cast<GenericValue&>(*this).FindMember(name); }
-
+    
     //! Add a member (name-value pair) to the object.
     /*! \param name A string value as name of member.
         \param value Value of any type.
@@ -1004,6 +1007,12 @@ public:
     AddMember(StringRefType name, T value, Allocator& allocator) {
         GenericValue n(name);
         GenericValue v(value);
+        return AddMember(n, v, allocator);
+    }
+    
+    GenericValue& AddMember(StringRefType name, string value, Allocator& allocator) {
+        GenericValue n(name);
+        GenericValue v(value.c_str(), allocator);
         return AddMember(n, v, allocator);
     }
 
@@ -1287,7 +1296,14 @@ int z = a[0u].GetInt();             // This works too.
     //!@name Number
     //@{
 
-    int GetInt() const          { RAPIDJSON_ASSERT(flags_ & kIntFlag);   return data_.n.i.i;   }
+    int GetInt() const
+    {
+        if(flags_ & kIntFlag)return data_.n.i.i;
+        else{
+            exception e;
+            throw e;
+        }
+    }
     unsigned GetUint() const    { RAPIDJSON_ASSERT(flags_ & kUintFlag);  return data_.n.u.u;   }
     int64_t GetInt64() const    { RAPIDJSON_ASSERT(flags_ & kInt64Flag); return data_.n.i64; }
     uint64_t GetUint64() const  { RAPIDJSON_ASSERT(flags_ & kUint64Flag); return data_.n.u64; }
@@ -1312,7 +1328,7 @@ int z = a[0u].GetInt();             // This works too.
     //!@name String
     //@{
 
-    const Ch* GetString() const { RAPIDJSON_ASSERT(IsString()); return ((flags_ & kInlineStrFlag) ? data_.ss.str : data_.s.str); }
+    const Ch* GetString() const { if(!IsString()){exception e;throw e;} return ((flags_ & kInlineStrFlag) ? data_.ss.str : data_.s.str); }
 
     //! Get the length of string.
     /*! Since rapidjson permits "\\u0000" in the json string, strlen(v.GetString()) may not equal to v.GetStringLength().
