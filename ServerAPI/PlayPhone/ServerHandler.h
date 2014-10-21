@@ -17,12 +17,12 @@ namespace playphone {
     class Client;
     class PadConfig;
     class Server;
+    class PadUpdateObject;
     
     class ServerHandler{
     public:
         Server* serv;
         
-        ServerHandler;
         bool canJoin(Client* cli, string& why);
         const char* getName();
         const char* getDesc();
@@ -30,6 +30,8 @@ namespace playphone {
         int getOpenSlots();
         void onJoin(Client* cli);
         PadConfig getDefaultControls();
+        void onDisconnect(Client* cli);
+        void onPadUpdate(Client* cli, PadUpdateObject update);
     private:
     };
     

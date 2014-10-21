@@ -33,3 +33,7 @@ void ServerHandler::onJoin(playphone::Client *cli){}
 
 PadConfig ServerHandler::getDefaultControls(){ return PadConfig::PadConfig(); }
 
+void ServerHandler::onDisconnect(playphone::Client *cli){}
+
+void ServerHandler::onPadUpdate(playphone::Client *cli, playphone::PadUpdateObject update){}
+

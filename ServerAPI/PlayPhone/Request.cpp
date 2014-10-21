@@ -215,3 +215,17 @@ Value& PadConfig::serializeJSON(Document::AllocatorType &a){
     
     return JSONvalue;
 }
+
+bool PadUpdateObject::parseJSON(Value &v){
+    try {
+        action = v["action"].GetInt();
+        controlid = v["controlid"].GetInt();
+        Value& pos = v["position"];
+        x = pos["x"].GetInt();
+        y = pos["y"].GetInt();
+        
+        return true;
+    } catch (exception ex) {
+        return false;
+    }
+}

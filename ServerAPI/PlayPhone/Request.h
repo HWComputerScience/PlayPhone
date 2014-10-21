@@ -104,5 +104,12 @@ namespace playphone {
         vector<ControlObject> controls;
         string bgimg;
     };
+    
+    class PadUpdateObject{
+    public:
+        bool parseJSON(Value& v);
+        
+        int x,y,controlid,action;
+    };
 }
 #endif

@@ -156,6 +156,32 @@ Response Server::handleRequest(playphone::Request &r, Client* cli){
             }
             
             return resp;
+        }else if(r.operation == 3){
+            //Disconnect Request
+            Response resp(200,"OK");
+            if(cli->hasJoined){
+                handler.onDisconnect(cli);
+                cli->hasJoined = false;
+            }else{
+                Document d;
+                Value& obj = resp.serializeJSON(d.GetAllocator());
+                obj.AddMember("msg", string("not in game"), d.GetAllocator());
+            }
+            
+            return resp;
+        }else if(r.operation == 5){
+            //Pad State Change Request
+            Response resp(200,"OK");
+            if(cli->hasJoined){
+                PadUpdateObject update;
+                update.parseJSON(*r.root);
+                
+            }else{
+                Document d;
+                Value& obj = resp.serializeJSON(d.GetAllocator());
+                obj.AddMember("msg", string("not in game"), d.GetAllocator());
+            }
+            return resp;
         }
         
         return error("unimplemented op");
@@ -237,4 +263,14 @@ void Client::setControls(playphone::ControlObject& ctrls){
     Value& obj = r.serializeJSON(d.GetAllocator());
     obj.AddMember("padconfig", ctrls.serializeJSON(d.GetAllocator()), d.GetAllocator());
     send(r);
+}
+
+void Client::disconnect(string msg){
+    Request r(3);
+    Document d;
+    Value& obj = r.serializeJSON(d.GetAllocator());
+    obj.AddMember("msg", msg, d.GetAllocator());
+    send(r);
+    hasJoined = false;
+    shouldRun = false;
 }

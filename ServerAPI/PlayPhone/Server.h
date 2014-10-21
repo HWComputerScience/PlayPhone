@@ -42,6 +42,7 @@ namespace playphone {
         void send(Serializable &s);
         void run();
         void setControls(ControlObject& ctrls);
+        void disconnect(string msg);
     private:
         void handleMsg(string msg);
     };
