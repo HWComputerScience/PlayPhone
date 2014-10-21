@@ -42,18 +42,9 @@ void sendDiscovReq(){
     sendMsg(sock, r);
 }
 
-void sendGameReq(){
-    Request r(1);
-    GameObject game;
-    game.name = "WOW";
-    game.desc = "blah blah blah";
-    Document d;
-    Value& obj = r.serializeJSON(d.GetAllocator());
-    Value& gval = game.serializeJSON(d.GetAllocator());
-    obj.AddMember("game", gval, d.GetAllocator());
-    
+void sendJoinReq(){
+    Request r(2);
     sendMsg(sock, r);
-    
 }
 
 void handle(const char* msg, int len){
@@ -99,7 +90,7 @@ void simulate(){
     t.detach();
     
     sendDiscovReq();
-    sendGameReq();
+    sendJoinReq();
     
     sleep(200);
 }

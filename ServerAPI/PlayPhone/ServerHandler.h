@@ -15,14 +15,23 @@
 namespace playphone {
     
     class Client;
+    class PadConfig;
+    class Server;
+    class PadUpdateObject;
     
     class ServerHandler{
     public:
-        bool canJoin(Client& cli, string& why);
+        Server* serv;
+        
+        bool canJoin(Client* cli, string& why);
         const char* getName();
         const char* getDesc();
         int getFilledSlots();
         int getOpenSlots();
+        void onJoin(Client* cli);
+        PadConfig getDefaultControls();
+        void onDisconnect(Client* cli);
+        void onPadUpdate(Client* cli, PadUpdateObject update);
     private:
     };
     
