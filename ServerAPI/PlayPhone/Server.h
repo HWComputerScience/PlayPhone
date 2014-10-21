@@ -23,7 +23,9 @@ namespace playphone {
     class Request;
     class Response;
     class ServerHandler;
-//    class IDObject;
+    class IDObject;
+    class GameObject;
+    class ControlObject;
     
     void sendMsg(TCPSocket* sock, Serializable& r);
     
@@ -33,12 +35,13 @@ namespace playphone {
         int socketID;
         TCPSocket* sock;
         Server* serv;
-        bool shouldRun;
-//        IDObject* clientID:
+        bool shouldRun, hasJoined;
+        shared_ptr<IDObject> clientID;
         
         Client(TCPSocket* sock, int sockID, Server* serv);
         void send(Serializable &s);
         void run();
+        void setControls(ControlObject& ctrls);
     private:
         void handleMsg(string msg);
     };
@@ -52,17 +55,21 @@ namespace playphone {
         
         Server(ServerHandler& handler);
         void start();
-        void broadcast(Serializable &s, int except=-1);
-        bool send(Serializable& s, int clientID);
+        void refreshClients();
+        void setControls(ControlObject& ctrls);
+        
         Response handleRequest(Request& r, Client* cli);
         void handleResponse(Response& r, Client* cli);
     private:
         mutex mut;
         ServerHandler& handler;
         
+        bool send(Serializable& s, int clientID);
+        void broadcast(Serializable &s, int except=-1);
         int getClientID();
         void handleClient(TCPSocket* sock);
         void listenForSockets(TCPServerSocket *serverSock);
+        GameObject getGameObject();
     };
     
 }

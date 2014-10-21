@@ -23,6 +23,7 @@ void playphone::sendMsg(TCPSocket* sock, Serializable& r){
 Server::Server(ServerHandler& handler): handler(handler){
     currentClientID = 0;
     this->shouldRun = true;
+    handler.serv = this;
 }
 
 void Server::start(){
@@ -41,8 +42,8 @@ void Server::start(){
     printf("Successfully connected to port %d\n", currentPort);
     listenForSockets(serverSock);
     
-//    thread listenThread(&Server::listenForSockets, this, serverSock);
-//    listenThread.detach();
+    //    thread listenThread(&Server::listenForSockets, this, serverSock);
+    //    listenThread.detach();
 }
 
 void Server::listenForSockets(TCPServerSocket *serverSock){
@@ -86,42 +87,92 @@ void Server::broadcast(Serializable &s, int except){
     }
 }
 
+void Server::refreshClients(){
+    Request req(1);
+    Document d;
+    Value& obj = req.serializeJSON(d.GetAllocator());
+    GameObject g = getGameObject();
+    obj.AddMember("game", g.serializeJSON(d.GetAllocator()), d.GetAllocator());
+    for(map<int, Client&>::iterator it = clients.begin(); it != clients.end(); ++it){
+        sendMsg(it->second.sock, req);
+    }
+}
+
 Response error(const char* text){return Response(404, text);}
+
+GameObject Server::getGameObject(){
+    GameObject gobj;
+    gobj.name = handler.getName();
+    gobj.desc = handler.getDesc();
+    gobj.filledslots = handler.getFilledSlots();
+    gobj.openslots = handler.getOpenSlots();
+    
+    return gobj;
+}
 
 Response Server::handleRequest(playphone::Request &r, Client* cli){
     //handle requests here
-    
-    if(r.operation==0){
-        Value& cid = (*r.root)["id"];
-        IDObject idobj;
-        if(!idobj.parseJSON(cid))return error("bad id json");
-        Response resp(200, "OK");
-        GameObject gobj;
-        gobj.name = handler.getName();
-        gobj.desc = handler.getDesc();
+    try {
+        if(r.operation==0){
+            //Discovery Request
+            Value& cid = (*r.root)["id"];
+            cli->clientID = shared_ptr<IDObject>(new IDObject);
+            if(!(*cli->clientID).parseJSON(cid))return error("bad id json");
+            
+            Response resp(200, "OK");
+            GameObject gobj;
+            gobj.name = handler.getName();
+            gobj.desc = handler.getDesc();
+            gobj.filledslots = handler.getFilledSlots();
+            gobj.openslots = handler.getOpenSlots();
+            
+            Document d;
+            Value& obj = resp.serializeJSON(d.GetAllocator());
+            Value& game = gobj.serializeJSON(d.GetAllocator());
+            obj.AddMember("game", game, d.GetAllocator());
+            
+            Value banned;
+            banned.SetObject();
+            string why;
+            bool is = !handler.canJoin(cli, why);
+            banned.AddMember("is", is, d.GetAllocator());
+            banned.AddMember("why", why, d.GetAllocator());
+            obj.AddMember("banned", banned, d.GetAllocator());
+            
+            return resp;
+        }else if(r.operation==2){
+            //Join Request
+            string tmp;
+            bool canJoin = handler.canJoin(cli, tmp) && !cli->hasJoined && handler.getOpenSlots()>0;
+            
+            Response resp(200,"OK");
+            Document d;
+            Value& obj = resp.serializeJSON(d.GetAllocator());
+            obj.AddMember("accepted", canJoin, d.GetAllocator());
+            if(canJoin){
+                handler.onJoin(cli);
+                cli->hasJoined = true;
+                obj.AddMember("padconfig", handler.getDefaultControls().serializeJSON(d.GetAllocator()), d.GetAllocator());
+            }
+            
+            return resp;
+        }
         
-        Document d;
-        Value& obj = resp.serializeJSON(d.GetAllocator());
-        Value& game = gobj.serializeJSON(d.GetAllocator());
-        obj.AddMember("game", game, d.GetAllocator());
-        
-        return resp;
-    }else if(r.operation==1){
-        Value& cid = (*r.root)["game"];
-        GameObject gobj;
-        if(!gobj.parseJSON(cid))return error("bad game json");
-        char buf[20];
-        sprintf(buf, "welcome to %s", gobj.name.c_str());
-        Response resp(200, buf);
-        return resp;
+        return error("unimplemented op");
+    }catch(exception ex){
+        return error("json missing required field");
     }
-    
-    return error("unknown op");
 }
 
 void Server::handleResponse(playphone::Response &r, Client* cli){
     //handle responses here
-    printf("received a response\n");
+    
+}
+
+void Server::setControls(playphone::ControlObject &ctrls){
+    for(map<int, Client&>::iterator it = clients.begin(); it != clients.end(); ++it){
+        it->second.setControls(ctrls);
+    }
 }
 
 Client::Client(TCPSocket* sock, int id, Server* serv){
@@ -129,6 +180,7 @@ Client::Client(TCPSocket* sock, int id, Server* serv){
     this->sock = sock;
     this->serv = serv;
     shouldRun = true;
+    hasJoined = false;
 }
 
 void Client::send(playphone::Serializable &s){
@@ -140,7 +192,6 @@ void Client::handleMsg(string in){
         //client disconnected
         return;
     }
-    printf("server received: %s\n", in.c_str());
     
     Request req;
     Response resp;
@@ -175,8 +226,15 @@ void Client::run(){
             bytesProcessed+=len+1;
         } while (bytesProcessed<amt);
     }
-    printf("client disconnected\n");
     serv->clients.erase(serv->clients.find(socketID));
     delete sock;
     sock=NULL;
+}
+
+void Client::setControls(playphone::ControlObject& ctrls){
+    Request r(4);
+    Document d;
+    Value& obj = r.serializeJSON(d.GetAllocator());
+    obj.AddMember("padconfig", ctrls.serializeJSON(d.GetAllocator()), d.GetAllocator());
+    send(r);
 }

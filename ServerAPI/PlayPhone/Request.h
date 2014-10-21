@@ -6,6 +6,7 @@
 #include "PlayPhone.h"
 #include "writer.h"
 #include "document.h"
+#include <vector>
 
 using namespace rapidjson;
 using namespace std;
@@ -81,7 +82,27 @@ namespace playphone {
         Value& serializeJSON(Document::AllocatorType& a);
         bool parseJSON(Value& v);
         
-        int x,y,w,h;
+        double x,y,w,h;
+    };
+    
+    class ControlObject : public Serializable{
+    public:
+        Value& serializeJSON(Document::AllocatorType& a);
+        bool parseJSON(Value& v);
+        
+        int type;
+        FrameObject frame;
+        int controlID;
+        string img;
+    };
+    
+    class PadConfig : public Serializable{
+    public:
+        Value& serializeJSON(Document::AllocatorType& a);
+        bool parseJSON(Value& v);
+        
+        vector<ControlObject> controls;
+        string bgimg;
     };
 }
 #endif

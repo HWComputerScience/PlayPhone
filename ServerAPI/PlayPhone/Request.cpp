@@ -153,3 +153,65 @@ bool GameObject::parseJSON(Value &v){
         return false;
     }
 }
+
+bool FrameObject::parseJSON(Value &v){
+    try {
+        x = v["x"].GetDouble();
+        y = v["y"].GetDouble();
+        w = v["w"].GetDouble();
+        h = v["h"].GetDouble();
+        return true;
+    } catch (exception ex) {
+        return false;
+    }
+}
+
+Value& FrameObject::serializeJSON(Document::AllocatorType &a){
+    JSONvalue.SetObject();
+    JSONvalue.AddMember("x", x, a);
+    JSONvalue.AddMember("y", y, a);
+    JSONvalue.AddMember("w", w, a);
+    JSONvalue.AddMember("h", h, a);
+    
+    return JSONvalue;
+}
+
+bool ControlObject::parseJSON(Value &v){
+    try {
+        type = v["type"].GetInt();
+        controlID = v["type"].GetInt();
+        img = v["img"].GetString();
+        if(!frame.parseJSON(v["frame"]))return false;
+        return true;
+    } catch (exception ex) {
+        return false;
+    }
+}
+
+Value& ControlObject::serializeJSON(Document::AllocatorType &a){
+    JSONvalue.SetObject();
+    JSONvalue.AddMember("type", type, a);
+    
+    Value& fr = frame.serializeJSON(a);
+    JSONvalue.AddMember("frame", fr, a);
+    JSONvalue.AddMember("id", controlID, a);
+    if(img.length()>0){
+        JSONvalue.AddMember("img", img, a);
+    }
+    
+    return JSONvalue;
+}
+
+Value& PadConfig::serializeJSON(Document::AllocatorType &a){
+    JSONvalue.SetObject();
+    JSONvalue.AddMember("bgimg", bgimg, a);
+    
+    Value ctrls;
+    ctrls.SetArray();
+    for(int i=0; i<controls.size(); i++){
+        ctrls.PushBack(controls[i].serializeJSON(a), a);
+    }
+    JSONvalue.AddMember("controls", ctrls, a);
+    
+    return JSONvalue;
+}

@@ -1309,7 +1309,12 @@ int z = a[0u].GetInt();             // This works too.
     uint64_t GetUint64() const  { RAPIDJSON_ASSERT(flags_ & kUint64Flag); return data_.n.u64; }
 
     double GetDouble() const {
-        RAPIDJSON_ASSERT(IsNumber());
+//        RAPIDJSON_ASSERT(IsNumber());
+        if(!IsNumber()){
+            exception ex;
+            throw ex;
+            return 0.0;
+        }
         if ((flags_ & kDoubleFlag) != 0)                return data_.n.d;   // exact type, no conversion.
         if ((flags_ & kIntFlag) != 0)                   return data_.n.i.i; // int -> double
         if ((flags_ & kUintFlag) != 0)                  return data_.n.u.u; // unsigned -> double

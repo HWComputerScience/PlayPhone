@@ -15,14 +15,21 @@
 namespace playphone {
     
     class Client;
+    class PadConfig;
+    class Server;
     
     class ServerHandler{
     public:
-        bool canJoin(Client& cli, string& why);
+        Server* serv;
+        
+        ServerHandler;
+        bool canJoin(Client* cli, string& why);
         const char* getName();
         const char* getDesc();
         int getFilledSlots();
         int getOpenSlots();
+        void onJoin(Client* cli);
+        PadConfig getDefaultControls();
     private:
     };
     

@@ -9,7 +9,7 @@
 #include "ServerHandler.h"
 using namespace playphone;
 
-bool ServerHandler::canJoin(playphone::Client &cli, string &why){
+bool ServerHandler::canJoin(playphone::Client *cli, string &why){
     return true;
 }
 
@@ -28,3 +28,8 @@ int ServerHandler::getFilledSlots(){
 int ServerHandler::getOpenSlots(){
     return 0;
 }
+
+void ServerHandler::onJoin(playphone::Client *cli){}
+
+PadConfig ServerHandler::getDefaultControls(){ return PadConfig::PadConfig(); }
+
