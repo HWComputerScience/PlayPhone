@@ -15,12 +15,13 @@
 #include <unistd.h>
 
 #include "Simulator.h"
+#include "TestGame.h"
 
 using namespace rapidjson;
 
 void doServer(){
     using namespace playphone;
-    ServerHandler h;
+    TestGame h;
     Server serv(h);
     serv.start();
 }

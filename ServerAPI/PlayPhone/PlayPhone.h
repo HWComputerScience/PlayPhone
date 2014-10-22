@@ -13,8 +13,17 @@
 #include "Request.h"
 #include "ServerHandler.h"
 
-#define PP_DEBUG true
+#define PP_DEBUG 0
 #define BUFFER_LENGTH 1024
 #define START_PORT 47810
+
+#define BUTTON 0
+#define DPAD 1
+#define JOYSTICK 2
+#define IMAGE 3
+
+#define ACTION_DOWN 1
+#define ACTION_MOVE 2
+#define ACTION_UP 0
 
 #endif
