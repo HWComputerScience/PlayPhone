@@ -9,15 +9,17 @@
 #include "ServerHandler.h"
 using namespace playphone;
 
+void ServerHandler::onStart(){}
+
 bool ServerHandler::canJoin(playphone::Client *cli, string &why){
     return true;
 }
 
-const char* ServerHandler::getName(){
+string ServerHandler::getName(){
     return "";
 }
 
-const char* ServerHandler::getDesc(){
+string ServerHandler::getDesc(){
     return "";
 }
 

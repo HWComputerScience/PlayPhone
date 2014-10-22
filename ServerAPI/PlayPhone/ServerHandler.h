@@ -23,15 +23,16 @@ namespace playphone {
     public:
         Server* serv;
         
-        bool canJoin(Client* cli, string& why);
-        const char* getName();
-        const char* getDesc();
-        int getFilledSlots();
-        int getOpenSlots();
-        void onJoin(Client* cli);
-        PadConfig getDefaultControls();
-        void onDisconnect(Client* cli);
-        void onPadUpdate(Client* cli, PadUpdateObject update);
+        virtual void onStart();
+        virtual bool canJoin(Client* cli, string& why);
+        virtual string getName();
+        virtual string getDesc();
+        virtual int getFilledSlots();
+        virtual int getOpenSlots();
+        virtual void onJoin(Client* cli);
+        virtual PadConfig getDefaultControls();
+        virtual void onDisconnect(Client* cli);
+        virtual void onPadUpdate(Client* cli, PadUpdateObject update);
     private:
     };
     

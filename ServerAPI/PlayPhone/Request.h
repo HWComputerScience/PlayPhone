@@ -88,7 +88,7 @@ namespace playphone {
     class ControlObject : public Serializable{
     public:
         Value& serializeJSON(Document::AllocatorType& a);
-        bool parseJSON(Value& v);
+        virtual bool parseJSON(Value& v);
         
         int type;
         FrameObject frame;
@@ -101,7 +101,7 @@ namespace playphone {
         Value& serializeJSON(Document::AllocatorType& a);
         bool parseJSON(Value& v);
         
-        vector<ControlObject> controls;
+        vector<ControlObject*> controls;
         string bgimg;
     };
     
@@ -110,6 +110,24 @@ namespace playphone {
         bool parseJSON(Value& v);
         
         int x,y,controlid,action;
+    };
+    
+    class ButtonControl : public ControlObject{
+    public:
+        ButtonControl();
+        
+    };
+    
+    class DPadControl : public ControlObject{
+    public:
+        DPadControl();
+        
+    };
+    
+    class Joystick : public ControlObject{
+    public:
+        Joystick();
+        
     };
 }
 #endif

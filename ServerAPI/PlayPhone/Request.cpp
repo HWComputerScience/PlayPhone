@@ -209,7 +209,7 @@ Value& PadConfig::serializeJSON(Document::AllocatorType &a){
     Value ctrls;
     ctrls.SetArray();
     for(int i=0; i<controls.size(); i++){
-        ctrls.PushBack(controls[i].serializeJSON(a), a);
+        ctrls.PushBack(controls[i]->serializeJSON(a), a);
     }
     JSONvalue.AddMember("controls", ctrls, a);
     
@@ -228,4 +228,8 @@ bool PadUpdateObject::parseJSON(Value &v){
     } catch (exception ex) {
         return false;
     }
+}
+
+ButtonControl::ButtonControl(){
+    this->type = BUTTON;
 }

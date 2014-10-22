@@ -21,18 +21,15 @@ using namespace playphone;
 TCPSocket *sock;
 char buf[1024];
 mutex mut;
+IDObject id1, id2;
 
 void sendBadRequest(){
     Request r;
     sendMsg(sock, r);
 }
 
-void sendDiscovReq(){
+void sendDiscovReq(IDObject& id){
     Request r(0);
-    IDObject id;
-    id.firstname = "James";
-    id.lastname = "Lennon";
-    id.username = "j_lennon";
     Document d;
     Value& obj = r.serializeJSON(d.GetAllocator());
     Value& idval = id.serializeJSON(d.GetAllocator());
@@ -47,9 +44,14 @@ void sendJoinReq(){
     sendMsg(sock, r);
 }
 
+void sendDisconnectReq(){
+    Request r(3);
+    sendMsg(sock, r);
+}
+
 void handle(const char* msg, int len){
     mut.lock();
-    cout << "simulator got: " << msg << endl;
+    if(PP_DEBUG)cout << "simulator got: " << msg << endl;
     mut.unlock();
 }
 
@@ -84,13 +86,18 @@ void simulate(){
             currentPort++;
         }
     }
-    printf("Simulator connected on port %d\n", currentPort);
+    if(PP_DEBUG)printf("Simulator connected on port %d\n", currentPort);
     
     thread t(getResponses);
     t.detach();
     
-    sendDiscovReq();
+    id1.firstname = "James";
+    id1.lastname = "Lennon";
+    id1.username = "j_lennon";
+    id1.phoneid = "a";
+    sendDiscovReq(id1);
     sendJoinReq();
+    sendDisconnectReq();
     
-    sleep(200);
+    sleep(2);
 }

@@ -20,7 +20,8 @@ void playphone::sendMsg(TCPSocket* sock, Serializable& r){
     sock->send(msg, len+1);
 }
 
-Server::Server(ServerHandler& handler): handler(handler){
+Server::Server(ServerHandler& h): handler(h){
+    this->handler = h;
     currentClientID = 0;
     this->shouldRun = true;
     handler.serv = this;
@@ -35,11 +36,12 @@ void Server::start(){
             serverSock = new TCPServerSocket("0.0.0.0", currentPort);
             break;
         } catch (SocketException ex) {
-            printf("Port %d in use\n", currentPort);
+            if(PP_DEBUG)printf("Port %d in use\n", currentPort);
             currentPort++;
         }
     }
-    printf("Successfully connected to port %d\n", currentPort);
+    if(PP_DEBUG)printf("Successfully connected to port %d\n", currentPort);
+    handler.onStart();
     listenForSockets(serverSock);
     
     //    thread listenThread(&Server::listenForSockets, this, serverSock);
