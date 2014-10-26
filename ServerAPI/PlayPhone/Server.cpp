@@ -11,6 +11,7 @@
 #include <sstream>
 #include <stdio.h>
 #include <cstdio>
+#include <unistd.h>
 
 using namespace playphone;
 
@@ -27,7 +28,20 @@ Server::Server(ServerHandler& h): handler(h){
     handler.serv = this;
 }
 
+void Server::advertiseLocation(unsigned short port){
+    UDPSocket uSock(9999);
+    char msg[10];
+    string from;
+    unsigned short fromPort;
+    while (true) {
+        uSock.recvFrom(msg, 10, from, fromPort);
+        if (PP_DEBUG)printf("packet from %s\n", from.c_str());
+        uSock.sendTo("a", 1, from, fromPort);
+    }
+}
+
 void Server::start(){
+    
     TCPServerSocket* serverSock = nullptr;
     unsigned short currentPort = START_PORT;
     while(serverSock==nullptr){
@@ -41,11 +55,13 @@ void Server::start(){
         }
     }
     if(PP_DEBUG)printf("Successfully connected to port %d\n", currentPort);
+    
+    //Advertise IP Address
+    thread t(&Server::advertiseLocation, this, currentPort);
+    t.detach();
+    
     handler.onStart();
     listenForSockets(serverSock);
-    
-    //    thread listenThread(&Server::listenForSockets, this, serverSock);
-    //    listenThread.detach();
 }
 
 void Server::listenForSockets(TCPServerSocket *serverSock){

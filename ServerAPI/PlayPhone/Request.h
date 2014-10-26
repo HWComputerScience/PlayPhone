@@ -124,9 +124,9 @@ namespace playphone {
         
     };
     
-    class Joystick : public ControlObject{
+    class JoystickControl : public ControlObject{
     public:
-        Joystick();
+        JoystickControl();
         
     };
 }

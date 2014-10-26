@@ -233,3 +233,11 @@ bool PadUpdateObject::parseJSON(Value &v){
 ButtonControl::ButtonControl(){
     this->type = BUTTON;
 }
+
+DPadControl::DPadControl(){
+    this->type = DPAD;
+}
+
+JoystickControl::JoystickControl(){
+    this->type = JOYSTICK;
+}

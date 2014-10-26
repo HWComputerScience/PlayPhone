@@ -65,6 +65,7 @@ namespace playphone {
         mutex mut;
         ServerHandler& handler;
         
+        void advertiseLocation(unsigned short port);
         bool send(Serializable& s, int clientID);
         void broadcast(Serializable &s, int except=-1);
         int getClientID();
