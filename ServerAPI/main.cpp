@@ -28,7 +28,7 @@ void doServer(){
 
 int main(){
     thread t(doServer);
-    t.detach();
+    t.join();
     simulate();
     
     return 0;

@@ -53,6 +53,7 @@ namespace playphone {
         int currentClientID;
         map<int, Client&> clients;
         bool shouldRun;
+        ServerHandler& handler;
         
         Server(ServerHandler& handler);
         void start();
@@ -63,8 +64,8 @@ namespace playphone {
         void handleResponse(Response& r, Client* cli);
     private:
         mutex mut;
-        ServerHandler& handler;
         
+        void advertiseLocation(unsigned short port);
         bool send(Serializable& s, int clientID);
         void broadcast(Serializable &s, int except=-1);
         int getClientID();
