@@ -251,7 +251,6 @@ void Client::handleMsg(string in){
 }
 
 void Client::run(){
-    //TODO: confirm buffer length
     char buf[BUFFER_LENGTH];
     string msg;
     
@@ -270,6 +269,7 @@ void Client::run(){
             bytesProcessed+=len+1;
         } while (bytesProcessed<amt);
     }
+    serv->handler.onDisconnect(this);
     serv->clients.erase(serv->clients.find(socketID));
     delete sock;
     sock=NULL;
