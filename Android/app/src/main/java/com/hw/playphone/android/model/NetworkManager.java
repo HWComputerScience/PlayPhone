@@ -16,77 +16,87 @@ import java.util.Scanner;
  */
 
 public class NetworkManager {
-        static final int start_port = 47810, num_ports = 10;
+    static final int start_port = 47810, num_ports = 10;
 
-        static ServerDiscoveryListener listener;
+    static ServerDiscoveryListener listener;
 
-        public static void findServers(ServerDiscoveryListener listener){
-            NetworkManager.listener = listener;
-            new DiscoverTask().execute();
-        }
-
-        static class DiscoverTask extends AsyncTask<Void, Void, Void> {
-
-            @Override
-            protected Void doInBackground(Void... params) {
-                try {
-                    final DatagramSocket udpsock = new DatagramSocket();
-                    DatagramPacket packet = new DatagramPacket(new byte[]{'a'}, 1, InetAddress.getByName("10.0.1.9"), 9999);
-
-                    for(int i=0; i<10; i++){
-                        udpsock.send(packet);
-                    }
-
-                    while(udpsock.isConnected()){
-                        udpsock.receive(packet);
-                        Log.d("PlayPhone", "found server at: " + packet.getAddress());
-                        new ConnectTask().execute(packet.getAddress());
-                        break;
-                    }
-                    udpsock.close();
-                } catch (Exception e) {
-                    e.printStackTrace();
-                }
-                return null;
-            }
-
-        }
-
-        static class ConnectTask extends AsyncTask<InetAddress, Void, Void>{
-
-            @Override
-            protected Void doInBackground(InetAddress... params) {
-                for(int i=0; i<num_ports; i++){
-                    try {
-                        GameDesc curGame = new GameDesc();
-                        curGame.s = new Socket(params[0], start_port + i);
-
-                        Request r = new Request(0);
-                        PrintWriter out = new PrintWriter(curGame.s.getOutputStream());
-                        Scanner in = new Scanner(curGame.s.getInputStream());
-                        out.print(r);
-
-                        curGame.s.close();
-                    } catch (Exception e) {
-                        try {
-                        } catch (Exception e1) {
-                            e1.printStackTrace();
-                        }
-                        e.printStackTrace();
-                    }
-                }
-                return null;
-            }
-
-        }
-
-        public static interface ServerDiscoveryListener{
-            public void setGames(ArrayList<GameDesc> games);
-        }
-
-        public static class GameDesc{
-            public String name, desc;
-            public int openslots,filledslots;
-            public Socket s;
-        }
+    public static void findServers(ServerDiscoveryListener listener) {
+        NetworkManager.listener = listener;
+        new DiscoverTask().execute();
     }
+
+    static class DiscoverTask extends AsyncTask<Void, Void, Void> {
+
+        @Override
+        protected Void doInBackground(Void... params) {
+            try {
+                final DatagramSocket socket = new DatagramSocket();
+                socket.setBroadcast(true);
+                byte[] data = new byte['a'];
+                DatagramPacket packet = new DatagramPacket(data, data.length,
+                        InetAddress.getByName("255.255.255.255"), 9999);
+
+                for (int i = 0; i < 10; i++) {
+                    socket.send(packet);
+                }
+
+                while (!socket.isClosed()) {
+                    socket.receive(packet);
+                    if (packet.getPort() == 9999) {
+                        data = packet.getData();
+                        int port = (data[0] & 0xFF) * 256 + (data[1] & 0xFF);
+
+                        Log.d("PlayPhone", "Found a server at: " + packet.getAddress() + ". Using port: " + port);
+
+                        new ConnectTask().execute(packet.getAddress(), port);
+
+                    }
+                    break;
+                }
+                socket.close();
+            } catch (Exception e) {
+                e.printStackTrace();
+            }
+            return null;
+        }
+
+    }
+
+    static class ConnectTask extends AsyncTask<Object, Void, Void> {
+
+        @Override
+        protected Void doInBackground(Object... params) {
+            try {
+                GameDesc curGame = new GameDesc();
+                InetAddress addr = (InetAddress) params[0];
+                Integer port = (Integer) params[1];
+                curGame.s = new Socket(addr, port);
+
+                Request r = new Request(0);
+                PrintWriter out = new PrintWriter(curGame.s.getOutputStream());
+                Scanner in = new Scanner(curGame.s.getInputStream());
+                out.print(r);
+
+                curGame.s.close();
+            } catch (Exception e) {
+                try {
+                } catch (Exception e1) {
+                    e1.printStackTrace();
+                }
+                e.printStackTrace();
+            }
+            return null;
+        }
+
+    }
+
+    public static interface ServerDiscoveryListener {
+        public void setGames(ArrayList<GameDesc> games);
+    }
+
+    public static class GameDesc {
+        public String name, desc;
+        public int openslots, filledslots;
+        public Socket s;
+    }
+}
