@@ -3,13 +3,14 @@ package com.hw.playphone.android.model;
 import android.os.AsyncTask;
 import android.util.Log;
 
-import java.io.PrintWriter;
+import com.hw.playphone.android.GameConnection;
+
 import java.net.DatagramPacket;
 import java.net.DatagramSocket;
 import java.net.InetAddress;
 import java.net.Socket;
 import java.util.ArrayList;
-import java.util.Scanner;
+import java.util.HashSet;
 
 /**
  * Created by ethan on 10/27/14.
@@ -19,6 +20,7 @@ public class NetworkManager {
     static final int start_port = 47810, num_ports = 10;
 
     static ServerDiscoveryListener listener;
+    static HashSet<String> hosts = new HashSet<String>();
 
     public static void findServers(ServerDiscoveryListener listener) {
         NetworkManager.listener = listener;
@@ -40,16 +42,18 @@ public class NetworkManager {
                     socket.send(packet);
                 }
 
-                while (!socket.isClosed()) {
+                while (true) {
                     socket.receive(packet);
                     if (packet.getPort() == 9999) {
                         data = packet.getData();
                         int port = (data[0] & 0xFF) * 256 + (data[1] & 0xFF);
 
-                        Log.d("PlayPhone", "Found a server at: " + packet.getAddress() + ". Using port: " + port);
-
-                        new ConnectTask().execute(packet.getAddress(), port);
-
+                        String addr = packet.getAddress().toString() + ":" + port;
+                        if(!hosts.contains(addr)) {
+                            new ConnectTask().execute(packet.getAddress(), port);
+                            hosts.add(addr);
+                        }
+                        Log.d("PlayPhone", "Found a server at: " + addr);
                     }
                     break;
                 }
@@ -67,17 +71,10 @@ public class NetworkManager {
         @Override
         protected Void doInBackground(Object... params) {
             try {
-                GameDesc curGame = new GameDesc();
                 InetAddress addr = (InetAddress) params[0];
                 Integer port = (Integer) params[1];
-                curGame.s = new Socket(addr, port);
-
-                Request r = new Request(0);
-                PrintWriter out = new PrintWriter(curGame.s.getOutputStream());
-                Scanner in = new Scanner(curGame.s.getInputStream());
-                out.print(r);
-
-                curGame.s.close();
+                GameConnection gc = new GameConnection(new Socket(addr, port));
+                gc.sendDiscovery();
             } catch (Exception e) {
                 try {
                 } catch (Exception e1) {
@@ -91,12 +88,6 @@ public class NetworkManager {
     }
 
     public static interface ServerDiscoveryListener {
-        public void setGames(ArrayList<GameDesc> games);
-    }
-
-    public static class GameDesc {
-        public String name, desc;
-        public int openslots, filledslots;
-        public Socket s;
+        public void setGames(ArrayList<GameConnection> games);
     }
 }
