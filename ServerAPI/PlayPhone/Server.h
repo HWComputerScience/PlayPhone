@@ -64,6 +64,7 @@ namespace playphone {
         void handleResponse(Response& r, Client* cli);
     private:
         mutex mut;
+        unsigned short port;
         
         void advertiseLocation(unsigned short port);
         bool send(Serializable& s, int clientID);

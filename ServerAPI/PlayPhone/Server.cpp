@@ -30,13 +30,17 @@ Server::Server(ServerHandler& h): handler(h){
 
 void Server::advertiseLocation(unsigned short port){
     UDPSocket uSock(9999);
-    char msg[10];
+    int intPort = port;
+    char msg[2], buf[10];
+    msg[0] = port / 256;
+    msg[1] = port % 256;
+    printf("sending %d %d %d\n", msg[0], msg[1]);
     string from;
     unsigned short fromPort;
     while (true) {
-        uSock.recvFrom(msg, 10, from, fromPort);
+        uSock.recvFrom(buf, 10, from, fromPort);
         if (PP_DEBUG)printf("packet from %s\n", from.c_str());
-        uSock.sendTo("a", 1, from, fromPort);
+        uSock.sendTo(msg, 2, from, fromPort);
     }
 }
 
