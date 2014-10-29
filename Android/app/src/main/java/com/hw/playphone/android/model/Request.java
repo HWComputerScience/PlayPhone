@@ -11,7 +11,10 @@ public class Request {
 
     public Request(int op){
         try {
+            data = new JSONObject();
             data.put("op", op);
+            long unixTime = System.currentTimeMillis() / 1000L;
+            data.put("ts", unixTime);
         } catch (JSONException e) {
             e.printStackTrace();
         }

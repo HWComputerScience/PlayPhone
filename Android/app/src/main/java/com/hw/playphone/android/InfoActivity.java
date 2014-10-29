@@ -8,8 +8,6 @@ import android.view.View;
 import android.widget.EditText;
 
 import com.hw.playphone.android.model.UserData;
-import com.hw.playphone_android.GameListActivity;
-import com.hw.playphone_android.R;
 
 import java.util.UUID;
 
@@ -38,7 +36,8 @@ public class InfoActivity extends Activity {
         UserData.put("firstname", fname);
         UserData.put("lastname", lname);
         UserData.put("username", uname);
-        UserData.put("phoneid", uuid);
+        UserData.put("phoneID", uuid);
+        UserData.put("fbuid", "");
 
         Intent i = new Intent(this, GameListActivity.class);
         startActivity(i);
