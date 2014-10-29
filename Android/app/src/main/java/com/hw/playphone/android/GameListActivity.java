@@ -5,7 +5,7 @@ import android.os.Bundle;
 import android.view.Menu;
 import android.view.MenuItem;
 
-import com.hw.playphone_android.R;
+import com.hw.playphone.android.model.NetworkManager;
 
 
 public class GameListActivity extends Activity {
