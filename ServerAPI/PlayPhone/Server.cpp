@@ -34,7 +34,6 @@ void Server::advertiseLocation(unsigned short port){
     char msg[2], buf[10];
     msg[0] = port / 256;
     msg[1] = port % 256;
-    printf("sending %d %d %d\n", msg[0], msg[1]);
     string from;
     unsigned short fromPort;
     while (true) {
@@ -87,6 +86,7 @@ int Server::getClientID(){
 }
 
 void Server::handleClient(TCPSocket* sock){
+    if(PP_DEBUG)printf("New client connected\n");
     Client cli(sock, getClientID(), this);
     clients.insert(std::pair<int,Client&>(cli.socketID, cli));
     cli.run();
@@ -240,7 +240,7 @@ void Client::handleMsg(string in){
         //client disconnected
         return;
     }
-    
+    if(PP_DEBUG)printf("received %s\n", in.c_str());
     Request req;
     Response resp;
     if(req.parseJSON(in.c_str())){
