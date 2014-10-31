@@ -75,12 +75,9 @@ public class NetworkManager {
                 Integer port = (Integer) params[1];
                 GameConnection gc = new GameConnection(new Socket(addr, port));
                 gc.sendDiscovery();
+                gc.listen();
             } catch (Exception e) {
-                try {
-                } catch (Exception e1) {
-                    e1.printStackTrace();
-                }
-                e.printStackTrace();
+               e.printStackTrace();
             }
             return null;
         }
