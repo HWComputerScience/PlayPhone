@@ -30,13 +30,16 @@ Server::Server(ServerHandler& h): handler(h){
 
 void Server::advertiseLocation(unsigned short port){
     UDPSocket uSock(9999);
-    char msg[10];
+    int intPort = port;
+    char msg[2], buf[10];
+    msg[0] = port / 256;
+    msg[1] = port % 256;
     string from;
     unsigned short fromPort;
     while (true) {
-        uSock.recvFrom(msg, 10, from, fromPort);
+        uSock.recvFrom(buf, 10, from, fromPort);
         if (PP_DEBUG)printf("packet from %s\n", from.c_str());
-        uSock.sendTo("a", 1, from, fromPort);
+        uSock.sendTo(msg, 2, from, fromPort);
     }
 }
 
@@ -83,6 +86,7 @@ int Server::getClientID(){
 }
 
 void Server::handleClient(TCPSocket* sock){
+    if(PP_DEBUG)printf("New client connected\n");
     Client cli(sock, getClientID(), this);
     clients.insert(std::pair<int,Client&>(cli.socketID, cli));
     cli.run();
@@ -236,7 +240,7 @@ void Client::handleMsg(string in){
         //client disconnected
         return;
     }
-    
+    if(PP_DEBUG)printf("received %s\n", in.c_str());
     Request req;
     Response resp;
     if(req.parseJSON(in.c_str())){

@@ -112,11 +112,11 @@ Value& IDObject::serializeJSON(Document::AllocatorType &a){
 }
 
 bool IDObject::parseJSON(Value& v){
-    if(!v.HasMember("phoneID")&&v["phoneid"].IsString())return false;
-    if(!v.HasMember("firstname")&&v["phoneid"].IsString())return false;
-    if(!v.HasMember("lastname")&&v["phoneid"].IsString())return false;
-    if(!v.HasMember("username")&&v["phoneid"].IsString())return false;
-    if(!v.HasMember("fbuid")&&v["phoneid"].IsString())return false;
+    if(!v.HasMember("phoneID")&&v["phoneID"].IsString())return false;
+    if(!v.HasMember("firstname")&&v["firstname"].IsString())return false;
+    if(!v.HasMember("lastname")&&v["lastname"].IsString())return false;
+    if(!v.HasMember("username")&&v["username"].IsString())return false;
+    if(!v.HasMember("fbuid")&&v["fbuid"].IsString())return false;
     
     phoneid = v["phoneID"].GetString();
     firstname = v["firstname"].GetString();
