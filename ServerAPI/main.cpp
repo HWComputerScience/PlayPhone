@@ -15,14 +15,14 @@
 #include <unistd.h>
 
 #include "Simulator.h"
-#include "TestGame.h"
+#include "DebugGame.h"
 
 using namespace rapidjson;
 
 void doServer(){
     using namespace openpad;
-    TestGame h;
-    Server serv(h);
+    DebugGame game(4);
+    Server serv(game);
     serv.start();
 }
 

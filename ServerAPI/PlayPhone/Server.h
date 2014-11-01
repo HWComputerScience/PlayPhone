@@ -35,6 +35,7 @@ namespace openpad {
         int socketID;
         TCPSocket* sock;
         Server* serv;
+        void* userData;
         bool shouldRun, hasJoined;
         shared_ptr<IDObject> clientID;
         

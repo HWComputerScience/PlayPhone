@@ -164,8 +164,8 @@ Response Server::handleRequest(Request &r, Client* cli){
             return resp;
         }else if(r.operation==2){
             //Join Request
-            string tmp;
-            bool canJoin = handler.canJoin(cli, tmp) && !cli->hasJoined && handler.getOpenSlots()>0;
+            string why;
+            bool canJoin = cli->clientID!=nullptr && !cli->hasJoined && handler.getOpenSlots()>0 && handler.canJoin(cli, why);
             
             Response resp(200,"OK");
             Document d;
@@ -229,6 +229,8 @@ Client::Client(TCPSocket* sock, int id, Server* serv){
     this->serv = serv;
     shouldRun = true;
     hasJoined = false;
+    this->clientID = nullptr;
+    this->userData = nullptr;
 }
 
 void Client::send(Serializable &s){
