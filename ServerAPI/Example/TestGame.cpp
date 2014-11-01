@@ -10,7 +10,7 @@
 #include <iostream>
 
 using namespace std;
-using namespace playphone;
+using namespace openpad;
 
 void clearScreen(){
     cout << endl << "===================" << endl << endl;
@@ -51,18 +51,18 @@ int TestGame::getOpenSlots(){
     return slots;
 }
 
-bool TestGame::canJoin(playphone::Client *cli, string &why){
+bool TestGame::canJoin(Client *cli, string &why){
     return !hasStarted;
 }
 
-void TestGame::onJoin(playphone::Client *cli){
+void TestGame::onJoin(Client *cli){
     Player p;
     p.cli = cli;
     players.insert(make_pair(cli->clientID->phoneid, p));
     slots--;
     serv->refreshClients();
     
-    if(!PP_DEBUG)printLobby();
+    if(!OP_DEBUG)printLobby();
     if(slots==0){
         startGame();
     }
@@ -142,14 +142,14 @@ void TestGame::doTurn(int loc, int player){
     }
 }
 
-void TestGame::onPadUpdate(playphone::Client *cli, playphone::PadUpdateObject update){
+void TestGame::onPadUpdate(Client *cli, PadUpdateObject update){
     if(hasStarted){
         int player = distance(players.begin(), players.find(cli->clientID->phoneid));
         doTurn(update.controlid, player);
     }
 }
 
-void TestGame::onDisconnect(playphone::Client *cli){
+void TestGame::onDisconnect(Client *cli){
     slots++;
     players.erase(cli->clientID->phoneid);
     if(hasStarted){

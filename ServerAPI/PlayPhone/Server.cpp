@@ -13,9 +13,9 @@
 #include <cstdio>
 #include <unistd.h>
 
-using namespace playphone;
+using namespace openpad;
 
-void playphone::sendMsg(TCPSocket* sock, Serializable& r){
+void openpad::sendMsg(TCPSocket* sock, Serializable& r){
     const char* msg = r.getJSONString();
     int len = (int)strlen(msg);
     sock->send(msg, len+1);
@@ -38,7 +38,7 @@ void Server::advertiseLocation(unsigned short port){
     unsigned short fromPort;
     while (true) {
         uSock.recvFrom(buf, 10, from, fromPort);
-        if (PP_DEBUG)printf("packet from %s\n", from.c_str());
+        if (OP_DEBUG)printf("packet from %s\n", from.c_str());
         uSock.sendTo(msg, 2, from, fromPort);
     }
 }
@@ -53,11 +53,11 @@ void Server::start(){
             serverSock = new TCPServerSocket("0.0.0.0", currentPort);
             break;
         } catch (SocketException ex) {
-            if(PP_DEBUG)printf("Port %d in use\n", currentPort);
+            if(OP_DEBUG)printf("Port %d in use\n", currentPort);
             currentPort++;
         }
     }
-    if(PP_DEBUG)printf("Successfully connected to port %d\n", currentPort);
+    if(OP_DEBUG)printf("Successfully connected to port %d\n", currentPort);
     
     //Advertise IP Address
     thread t(&Server::advertiseLocation, this, currentPort);
@@ -86,7 +86,7 @@ int Server::getClientID(){
 }
 
 void Server::handleClient(TCPSocket* sock){
-    if(PP_DEBUG)printf("New client connected\n");
+    if(OP_DEBUG)printf("New client connected\n");
     Client cli(sock, getClientID(), this);
     clients.insert(std::pair<int,Client&>(cli.socketID, cli));
     cli.run();
@@ -132,7 +132,7 @@ GameObject Server::getGameObject(){
     return gobj;
 }
 
-Response Server::handleRequest(playphone::Request &r, Client* cli){
+Response Server::handleRequest(Request &r, Client* cli){
     //handle requests here
     try {
         if(r.operation==0){
@@ -212,12 +212,12 @@ Response Server::handleRequest(playphone::Request &r, Client* cli){
     }
 }
 
-void Server::handleResponse(playphone::Response &r, Client* cli){
+void Server::handleResponse(Response &r, Client* cli){
     //handle responses here
     
 }
 
-void Server::setControls(playphone::ControlObject &ctrls){
+void Server::setControls(ControlObject &ctrls){
     for(map<int, Client&>::iterator it = clients.begin(); it != clients.end(); ++it){
         it->second.setControls(ctrls);
     }
@@ -231,7 +231,7 @@ Client::Client(TCPSocket* sock, int id, Server* serv){
     hasJoined = false;
 }
 
-void Client::send(playphone::Serializable &s){
+void Client::send(Serializable &s){
     sendMsg(sock, s);
 }
 
@@ -240,7 +240,7 @@ void Client::handleMsg(string in){
         //client disconnected
         return;
     }
-    if(PP_DEBUG)printf("received %s\n", in.c_str());
+    if(OP_DEBUG)printf("received %s\n", in.c_str());
     Request req;
     Response resp;
     if(req.parseJSON(in.c_str())){
@@ -279,7 +279,7 @@ void Client::run(){
     sock=NULL;
 }
 
-void Client::setControls(playphone::ControlObject& ctrls){
+void Client::setControls(ControlObject& ctrls){
     Request r(4);
     Document d;
     Value& obj = r.serializeJSON(d.GetAllocator());

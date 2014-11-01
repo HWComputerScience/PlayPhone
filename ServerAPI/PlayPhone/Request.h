@@ -3,7 +3,7 @@
 
 #include <stdio.h>
 #include <string>
-#include "PlayPhone.h"
+#include "openpad.h"
 #include "writer.h"
 #include "document.h"
 #include <vector>
@@ -11,7 +11,7 @@
 using namespace rapidjson;
 using namespace std;
 
-namespace playphone {
+namespace openpad {
     
     const char* getStringFromJSON(Value& v);
     

@@ -6,14 +6,14 @@
 //  Copyright (c) 2014 James Lennon. All rights reserved.
 //
 
-#ifndef PlayPhone_h
-#define PlayPhone_h
+#ifndef openpad_H
+#define openpad_H
 
 #include "Server.h"
 #include "Request.h"
 #include "ServerHandler.h"
 
-#define PP_DEBUG 1
+#define OP_DEBUG 1
 #define BUFFER_LENGTH 1024
 #define START_PORT 47810
 

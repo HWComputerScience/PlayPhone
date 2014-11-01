@@ -1,6 +1,6 @@
 //
 //  Request.cpp
-//  HWConsoleServer
+//  OpenPad
 //
 //  Created by James Lennon on 10/10/14.
 //  Copyright (c) 2014 James Lennon. All rights reserved.
@@ -10,9 +10,9 @@
 
 using namespace rapidjson;
 using namespace std;
-using namespace playphone;
+using namespace openpad;
 
-const char* playphone::getStringFromJSON(Value& v){
+const char* openpad::getStringFromJSON(Value& v){
     StringBuffer out;
     Writer<StringBuffer> writer(out);
     v.Accept(writer);

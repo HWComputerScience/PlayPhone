@@ -10,12 +10,12 @@
 #define Server_H
 
 #include "PracticalSocket.h"
-#include "PlayPhone.h"
+#include "openpad.h"
 #include <mutex>
 #include <map>
 
 
-namespace playphone {
+namespace openpad {
     
     class Client;
     class Server;

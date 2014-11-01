@@ -8,7 +8,7 @@
 
 #include <stdio.h>
 #include <iostream>
-#include "PlayPhone/PlayPhone.h"
+#include "openpad.h"
 #include <cstdio>
 #include <sstream>
 #include <thread>
@@ -20,7 +20,7 @@
 using namespace rapidjson;
 
 void doServer(){
-    using namespace playphone;
+    using namespace openpad;
     TestGame h;
     Server serv(h);
     serv.start();
