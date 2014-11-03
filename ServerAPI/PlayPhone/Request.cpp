@@ -176,6 +176,13 @@ Value& FrameObject::serializeJSON(Document::AllocatorType &a){
     return JSONvalue;
 }
 
+void FrameObject::set(float x, float y, float w, float h){
+    this->x = x;
+    this->y = y;
+    this->w = w;
+    this->h = h;
+}
+
 bool ControlObject::parseJSON(Value &v){
     try {
         type = v["type"].GetInt();
@@ -230,14 +237,28 @@ bool PadUpdateObject::parseJSON(Value &v){
     }
 }
 
-ButtonControl::ButtonControl(){
+ButtonControl::ButtonControl(float x, float y, float w, int _controlid, int _btntype){
     this->type = BUTTON;
+    frame.set(x, y, w, w);
+    controlID = _controlid;
+    btntype = _btntype;
 }
 
-DPadControl::DPadControl(){
-    this->type = DPAD;
+Value& ButtonControl::serializeJSON(Document::AllocatorType &a){
+    ControlObject::serializeJSON(a);
+    JSONvalue.AddMember("btntype", btntype, a);
+    
+    return JSONvalue;
 }
 
-JoystickControl::JoystickControl(){
+DPadControl::DPadControl(float x, float y, float w, int _controlid){
+    this->type = BUTTON;
+    frame.set(x, y, w, w);
+    controlID = _controlid;
+}
+
+JoystickControl::JoystickControl(float x, float y, float w, int _controlid){
     this->type = JOYSTICK;
+    frame.set(x, y, w, w);
+    controlID = _controlid;
 }

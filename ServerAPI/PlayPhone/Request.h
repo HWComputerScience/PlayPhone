@@ -81,13 +81,14 @@ namespace openpad {
     public:
         Value& serializeJSON(Document::AllocatorType& a);
         bool parseJSON(Value& v);
+        void set(float x, float y, float w, float h);
         
         double x,y,w,h;
     };
     
     class ControlObject : public Serializable{
     public:
-        Value& serializeJSON(Document::AllocatorType& a);
+        virtual Value& serializeJSON(Document::AllocatorType& a);
         virtual bool parseJSON(Value& v);
         
         int type;
@@ -114,19 +115,21 @@ namespace openpad {
     
     class ButtonControl : public ControlObject{
     public:
-        ButtonControl();
+        ButtonControl(float x, float y, float w, int controlid, int btntype);
+        virtual Value& serializeJSON(Document::AllocatorType& a);
         
+        int btntype;
     };
     
     class DPadControl : public ControlObject{
     public:
-        DPadControl();
+        DPadControl(float x, float y, float w, int controlid);
         
     };
     
     class JoystickControl : public ControlObject{
     public:
-        JoystickControl();
+        JoystickControl(float x, float y, float w, int controlid);
         
     };
 }

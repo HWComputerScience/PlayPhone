@@ -91,7 +91,7 @@ PadConfig TestGame::getDefaultControls(){
     
     for(int i=0; i<3; i++){
         for(int j=0; j<3; j++){
-            ButtonControl* b = new ButtonControl;
+            ButtonControl* b = new ButtonControl(0,0,0,0,BUTTON_A);
             b->frame.x = j*(w+padding);
             b->frame.y = i*(w+padding);
             b->frame.w = w;
