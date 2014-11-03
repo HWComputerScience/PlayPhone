@@ -10,9 +10,9 @@
 #define __ServerXcode__TestGame__
 
 #include <stdio.h>
-#include "PlayPhone.h"
+#include "openpad.h"
 
-using namespace playphone;
+using namespace openpad;
 
 class Player {
 public:
