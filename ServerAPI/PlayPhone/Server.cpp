@@ -19,6 +19,7 @@ void openpad::sendMsg(TCPSocket* sock, Serializable& r){
     const char* msg = r.getJSONString();
     int len = (int)strlen(msg);
     sock->send(msg, len+1);
+    if(OP_DEBUG)printf("sent: %s\n", msg);
 }
 
 Server::Server(ServerHandler& h): handler(h){
@@ -30,7 +31,6 @@ Server::Server(ServerHandler& h): handler(h){
 
 void Server::advertiseLocation(unsigned short port){
     UDPSocket uSock(9999);
-    int intPort = port;
     char msg[2], buf[10];
     msg[0] = port / 256;
     msg[1] = port % 256;
@@ -147,6 +147,7 @@ Response Server::handleRequest(Request &r, Client* cli){
             gobj.desc = handler.getDesc();
             gobj.filledslots = handler.getFilledSlots();
             gobj.openslots = handler.getOpenSlots();
+            gobj.icon = fileToBase64(handler.getIconFilePath());
             
             Document d;
             Value& obj = resp.serializeJSON(d.GetAllocator());

@@ -105,15 +105,19 @@ std::string base64_decode(std::string const& encoded_string) {
 }
 
 std::string fileToBase64(std::string filePath){
-    std::ifstream t;
-    int length;
-    t.open(filePath);
-    t.seekg(0, std::ios::end);
-    length = t.tellg();
-    t.seekg(0, std::ios::beg);
-    char * buffer = new char[length];
-    t.read(buffer, length);
-    t.close();
-    return base64_encode((unsigned char*)buffer, length);
+    try{
+        std::ifstream t;
+        int length;
+        t.open(filePath);
+        t.seekg(0, std::ios::end);
+        length = t.tellg();
+        t.seekg(0, std::ios::beg);
+        char * buffer = new char[length];
+        t.read(buffer, length);
+        t.close();
+        return base64_encode((unsigned char*)buffer, length);
+    }catch(std::exception e){
+        return "";
+    }
 }
 

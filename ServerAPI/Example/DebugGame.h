@@ -29,6 +29,7 @@ public:
     int getOpenSlots();
     void onJoin(Client* cli);
     PadConfig getDefaultControls();
+    virtual string getIconFilePath();
     void onDisconnect(Client* cli);
     void onPadUpdate(Client* cli, PadUpdateObject update);
 };
