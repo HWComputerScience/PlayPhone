@@ -1,18 +1,18 @@
 //
 //  ServerHandler.h
-//  ServerXcode
+//  OpenPad
 //
 //  Created by James Lennon on 10/14/14.
 //  Copyright (c) 2014 James Lennon. All rights reserved.
 //
 
-#ifndef __ServerXcode__ServerHandler__
-#define __ServerXcode__ServerHandler__
+#ifndef __ServerHandler_H__
+#define __ServerHandler_H__
 
 #include <stdio.h>
-#include "PlayPhone.h"
+#include "openpad.h"
 
-namespace playphone {
+namespace openpad {
     
     class Client;
     class PadConfig;
@@ -23,15 +23,16 @@ namespace playphone {
     public:
         Server* serv;
         
-        bool canJoin(Client* cli, string& why);
-        const char* getName();
-        const char* getDesc();
-        int getFilledSlots();
-        int getOpenSlots();
-        void onJoin(Client* cli);
-        PadConfig getDefaultControls();
-        void onDisconnect(Client* cli);
-        void onPadUpdate(Client* cli, PadUpdateObject update);
+        virtual void onStart();
+        virtual bool canJoin(Client* cli, string& why);
+        virtual string getName();
+        virtual string getDesc();
+        virtual int getFilledSlots();
+        virtual int getOpenSlots();
+        virtual void onJoin(Client* cli);
+        virtual PadConfig getDefaultControls();
+        virtual void onDisconnect(Client* cli);
+        virtual void onPadUpdate(Client* cli, PadUpdateObject update);
     private:
     };
     

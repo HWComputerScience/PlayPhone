@@ -446,7 +446,7 @@ private:
     GenericValue(const GenericValue& rhs);
 
 public:
-
+    
     //! Constructor with JSON value type.
     /*! This creates a Value of specified type with default content.
         \param type Type of the value.

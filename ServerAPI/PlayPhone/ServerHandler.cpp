@@ -1,23 +1,26 @@
 //
 //  ServerHandler.cpp
-//  ServerXcode
+//  OpenPad
 //
 //  Created by James Lennon on 10/14/14.
 //  Copyright (c) 2014 James Lennon. All rights reserved.
 //
 
 #include "ServerHandler.h"
-using namespace playphone;
 
-bool ServerHandler::canJoin(playphone::Client *cli, string &why){
+using namespace openpad;
+
+void ServerHandler::onStart(){}
+
+bool ServerHandler::canJoin(Client *cli, string &why){
     return true;
 }
 
-const char* ServerHandler::getName(){
+string ServerHandler::getName(){
     return "";
 }
 
-const char* ServerHandler::getDesc(){
+string ServerHandler::getDesc(){
     return "";
 }
 
@@ -29,11 +32,11 @@ int ServerHandler::getOpenSlots(){
     return 0;
 }
 
-void ServerHandler::onJoin(playphone::Client *cli){}
+void ServerHandler::onJoin(Client *cli){}
 
 PadConfig ServerHandler::getDefaultControls(){ return PadConfig::PadConfig(); }
 
-void ServerHandler::onDisconnect(playphone::Client *cli){}
+void ServerHandler::onDisconnect(Client *cli){}
 
-void ServerHandler::onPadUpdate(playphone::Client *cli, playphone::PadUpdateObject update){}
+void ServerHandler::onPadUpdate(Client *cli, PadUpdateObject update){}
 

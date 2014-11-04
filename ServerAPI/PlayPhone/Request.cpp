@@ -1,6 +1,6 @@
 //
 //  Request.cpp
-//  HWConsoleServer
+//  OpenPad
 //
 //  Created by James Lennon on 10/10/14.
 //  Copyright (c) 2014 James Lennon. All rights reserved.
@@ -10,9 +10,9 @@
 
 using namespace rapidjson;
 using namespace std;
-using namespace playphone;
+using namespace openpad;
 
-const char* playphone::getStringFromJSON(Value& v){
+const char* openpad::getStringFromJSON(Value& v){
     StringBuffer out;
     Writer<StringBuffer> writer(out);
     v.Accept(writer);
@@ -112,11 +112,11 @@ Value& IDObject::serializeJSON(Document::AllocatorType &a){
 }
 
 bool IDObject::parseJSON(Value& v){
-    if(!v.HasMember("phoneID")&&v["phoneid"].IsString())return false;
-    if(!v.HasMember("firstname")&&v["phoneid"].IsString())return false;
-    if(!v.HasMember("lastname")&&v["phoneid"].IsString())return false;
-    if(!v.HasMember("username")&&v["phoneid"].IsString())return false;
-    if(!v.HasMember("fbuid")&&v["phoneid"].IsString())return false;
+    if(!v.HasMember("phoneID")&&v["phoneID"].IsString())return false;
+    if(!v.HasMember("firstname")&&v["firstname"].IsString())return false;
+    if(!v.HasMember("lastname")&&v["lastname"].IsString())return false;
+    if(!v.HasMember("username")&&v["username"].IsString())return false;
+    if(!v.HasMember("fbuid")&&v["fbuid"].IsString())return false;
     
     phoneid = v["phoneID"].GetString();
     firstname = v["firstname"].GetString();
@@ -176,6 +176,13 @@ Value& FrameObject::serializeJSON(Document::AllocatorType &a){
     return JSONvalue;
 }
 
+void FrameObject::set(float x, float y, float w, float h){
+    this->x = x;
+    this->y = y;
+    this->w = w;
+    this->h = h;
+}
+
 bool ControlObject::parseJSON(Value &v){
     try {
         type = v["type"].GetInt();
@@ -209,7 +216,7 @@ Value& PadConfig::serializeJSON(Document::AllocatorType &a){
     Value ctrls;
     ctrls.SetArray();
     for(int i=0; i<controls.size(); i++){
-        ctrls.PushBack(controls[i].serializeJSON(a), a);
+        ctrls.PushBack(controls[i]->serializeJSON(a), a);
     }
     JSONvalue.AddMember("controls", ctrls, a);
     
@@ -228,4 +235,30 @@ bool PadUpdateObject::parseJSON(Value &v){
     } catch (exception ex) {
         return false;
     }
+}
+
+ButtonControl::ButtonControl(float x, float y, float w, int _controlid, int _btntype){
+    this->type = BUTTON;
+    frame.set(x, y, w, w);
+    controlID = _controlid;
+    btntype = _btntype;
+}
+
+Value& ButtonControl::serializeJSON(Document::AllocatorType &a){
+    ControlObject::serializeJSON(a);
+    JSONvalue.AddMember("btntype", btntype, a);
+    
+    return JSONvalue;
+}
+
+DPadControl::DPadControl(float x, float y, float w, int _controlid){
+    this->type = BUTTON;
+    frame.set(x, y, w, w);
+    controlID = _controlid;
+}
+
+JoystickControl::JoystickControl(float x, float y, float w, int _controlid){
+    this->type = JOYSTICK;
+    frame.set(x, y, w, w);
+    controlID = _controlid;
 }

@@ -1,4 +1,4 @@
-package com.hw.playphone;
+package com.hw.playphone_android;
 
 import android.app.Application;
 import android.test.ApplicationTestCase;
