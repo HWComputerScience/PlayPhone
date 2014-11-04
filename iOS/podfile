@@ -1,0 +1,5 @@
+source 'https://github.com/CocoaPods/Specs.git'
+source 'https://github.com/robbiehanson/CocoaAsyncSocket.git'
+source 'https://github.com/zwaldowski/BlocksKit.git'
+pod 'CocoaAsyncSocket', :git => 'https://github.com/robbiehanson/CocoaAsyncSocket.git'
+pod 'BlocksKit', :git => 'https://github.com/zwaldowski/BlocksKit.git'
