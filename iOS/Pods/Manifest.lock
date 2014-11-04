@@ -1,0 +1,37 @@
+PODS:
+  - BlocksKit (2.2.5):
+    - BlocksKit/All
+  - BlocksKit/All (2.2.5):
+    - BlocksKit/Core
+    - BlocksKit/DynamicDelegate
+    - BlocksKit/MessageUI
+    - BlocksKit/QuickLook
+    - BlocksKit/UIKit
+  - BlocksKit/Core (2.2.5)
+  - BlocksKit/DynamicDelegate (2.2.5)
+  - BlocksKit/MessageUI (2.2.5):
+    - BlocksKit/Core
+    - BlocksKit/DynamicDelegate
+  - BlocksKit/QuickLook (2.2.5):
+    - BlocksKit/Core
+    - BlocksKit/DynamicDelegate
+  - BlocksKit/UIKit (2.2.5):
+    - BlocksKit/Core
+    - BlocksKit/DynamicDelegate
+  - CocoaAsyncSocket (7.4.1)
+
+DEPENDENCIES:
+  - BlocksKit (from `https://github.com/zwaldowski/BlocksKit.git`)
+  - CocoaAsyncSocket (from `https://github.com/robbiehanson/CocoaAsyncSocket.git`)
+
+EXTERNAL SOURCES:
+  BlocksKit:
+    :git: https://github.com/zwaldowski/BlocksKit.git
+  CocoaAsyncSocket:
+    :git: https://github.com/robbiehanson/CocoaAsyncSocket.git
+
+SPEC CHECKSUMS:
+  BlocksKit: fce66219cce8030475a04eae720cdde22f8fc30b
+  CocoaAsyncSocket: 4bbe8fc969e61e62f408de98faac676468e155b3
+
+COCOAPODS: 0.34.4
