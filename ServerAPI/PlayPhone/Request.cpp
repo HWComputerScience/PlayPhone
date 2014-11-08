@@ -223,6 +223,10 @@ Value& PadConfig::serializeJSON(Document::AllocatorType &a){
     return JSONvalue;
 }
 
+bool PadConfig::parseJSON(Value &v){
+    return true;
+}
+
 bool PadUpdateObject::parseJSON(Value &v){
     try {
         action = v["action"].GetInt();
