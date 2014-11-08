@@ -20,15 +20,17 @@
 using namespace rapidjson;
 
 void doServer(){
-    using namespace openpad;
+    
     DebugGame game(4);
-    Server serv(game);
+    
+    openpad::Server serv(game);
     serv.start();
 }
 
 int main(){
-    thread t(doServer);
-    t.detach();
-    simulate();
+//    thread t(doServer);
+//    t.detach();
+//    simulate();
+    doServer();
     return 0;
 }

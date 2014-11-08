@@ -37,7 +37,7 @@ string DebugGame::getDesc(){
 }
 
 string DebugGame::getIconFilePath(){
-    return "test";
+    return "DebugSmall.png";
 }
 
 int DebugGame::getFilledSlots(){
