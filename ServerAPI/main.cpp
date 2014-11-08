@@ -8,28 +8,29 @@
 
 #include <stdio.h>
 #include <iostream>
-#include "PlayPhone/PlayPhone.h"
+#include "openpad.h"
 #include <cstdio>
 #include <sstream>
 #include <thread>
 #include <unistd.h>
 
 #include "Simulator.h"
-#include "TestGame.h"
+#include "DebugGame.h"
 
 using namespace rapidjson;
 
 void doServer(){
-    using namespace playphone;
-    TestGame h;
-    Server serv(h);
+    
+    DebugGame game(4);
+    
+    openpad::Server serv(game);
     serv.start();
 }
 
 int main(){
-    thread t(doServer);
-    t.join();
-    simulate();
-    
+//    thread t(doServer);
+//    t.detach();
+//    simulate();
+    doServer();
     return 0;
 }

@@ -7,7 +7,7 @@
 //
 
 #include "Simulator.h"
-#include "PlayPhone.h"
+#include "openpad.h"
 #include "rapidjson.h"
 #include "document.h"
 #include "writer.h"
@@ -16,7 +16,7 @@
 #include <thread>
 #include <iostream>
 
-using namespace playphone;
+using namespace openpad;
 
 TCPSocket *sock;
 char buf[1024];
@@ -51,7 +51,7 @@ void sendDisconnectReq(){
 
 void handle(const char* msg, int len){
     mut.lock();
-    if(PP_DEBUG)cout << "simulator got: " << msg << endl;
+//    if(OP_DEBUG)cout << "simulator got: " << msg << endl;
     mut.unlock();
 }
 
@@ -86,7 +86,7 @@ void simulate(){
             currentPort++;
         }
     }
-    if(PP_DEBUG)printf("Simulator connected on port %d\n", currentPort);
+//    if(OP_DEBUG)printf("Simulator connected on port %d\n", currentPort);
     
     thread t(getResponses);
     t.detach();
@@ -96,8 +96,8 @@ void simulate(){
     id1.username = "j_lennon";
     id1.phoneid = "a";
     sendDiscovReq(id1);
-    sendJoinReq();
-    sendDisconnectReq();
+//    sendJoinReq();
+//    sendDisconnectReq();
     
     sleep(2);
 }

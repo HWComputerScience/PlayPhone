@@ -10,12 +10,12 @@
 #define Server_H
 
 #include "PracticalSocket.h"
-#include "PlayPhone.h"
+#include "openpad.h"
 #include <mutex>
 #include <map>
 
 
-namespace playphone {
+namespace openpad {
     
     class Client;
     class Server;
@@ -35,6 +35,7 @@ namespace playphone {
         int socketID;
         TCPSocket* sock;
         Server* serv;
+        void* userData;
         bool shouldRun, hasJoined;
         shared_ptr<IDObject> clientID;
         
@@ -53,6 +54,7 @@ namespace playphone {
         int currentClientID;
         map<int, Client&> clients;
         bool shouldRun;
+        ServerHandler& handler;
         
         Server(ServerHandler& handler);
         void start();
@@ -63,7 +65,7 @@ namespace playphone {
         void handleResponse(Response& r, Client* cli);
     private:
         mutex mut;
-        ServerHandler& handler;
+        unsigned short port;
         
         void advertiseLocation(unsigned short port);
         bool send(Serializable& s, int clientID);

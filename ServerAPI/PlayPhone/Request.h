@@ -3,7 +3,7 @@
 
 #include <stdio.h>
 #include <string>
-#include "PlayPhone.h"
+#include "openpad.h"
 #include "writer.h"
 #include "document.h"
 #include <vector>
@@ -11,7 +11,7 @@
 using namespace rapidjson;
 using namespace std;
 
-namespace playphone {
+namespace openpad {
     
     const char* getStringFromJSON(Value& v);
     
@@ -81,13 +81,14 @@ namespace playphone {
     public:
         Value& serializeJSON(Document::AllocatorType& a);
         bool parseJSON(Value& v);
+        void set(float x, float y, float w, float h);
         
         double x,y,w,h;
     };
     
     class ControlObject : public Serializable{
     public:
-        Value& serializeJSON(Document::AllocatorType& a);
+        virtual Value& serializeJSON(Document::AllocatorType& a);
         virtual bool parseJSON(Value& v);
         
         int type;
@@ -114,19 +115,21 @@ namespace playphone {
     
     class ButtonControl : public ControlObject{
     public:
-        ButtonControl();
+        ButtonControl(float x, float y, float w, int controlid, int btntype);
+        virtual Value& serializeJSON(Document::AllocatorType& a);
         
+        int btntype;
     };
     
     class DPadControl : public ControlObject{
     public:
-        DPadControl();
+        DPadControl(float x, float y, float w, int controlid);
         
     };
     
     class JoystickControl : public ControlObject{
     public:
-        JoystickControl();
+        JoystickControl(float x, float y, float w, int controlid);
         
     };
 }
