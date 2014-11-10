@@ -7,18 +7,18 @@
  * ----------------------------------------------------------------------------- */
 
 
-public class SWIGTYPE_p_vectorT_openpad__ControlObject_p_t {
+public class SWIGTYPE_p_std__vectorT_openpad__ControlObject_p_t {
   private long swigCPtr;
 
-  protected SWIGTYPE_p_vectorT_openpad__ControlObject_p_t(long cPtr, boolean futureUse) {
+  protected SWIGTYPE_p_std__vectorT_openpad__ControlObject_p_t(long cPtr, boolean futureUse) {
     swigCPtr = cPtr;
   }
 
-  protected SWIGTYPE_p_vectorT_openpad__ControlObject_p_t() {
+  protected SWIGTYPE_p_std__vectorT_openpad__ControlObject_p_t() {
     swigCPtr = 0;
   }
 
-  protected static long getCPtr(SWIGTYPE_p_vectorT_openpad__ControlObject_p_t obj) {
+  protected static long getCPtr(SWIGTYPE_p_std__vectorT_openpad__ControlObject_p_t obj) {
     return (obj == null) ? 0 : obj.swigCPtr;
   }
 }

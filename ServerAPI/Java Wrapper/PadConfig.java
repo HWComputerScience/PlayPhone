@@ -42,13 +42,13 @@ public class PadConfig extends Serializable {
     return openpadJNI.PadConfig_parseJSON(swigCPtr, this, SWIGTYPE_p_Value.getCPtr(v));
   }
 
-  public void setControls(SWIGTYPE_p_vectorT_openpad__ControlObject_p_t value) {
-    openpadJNI.PadConfig_controls_set(swigCPtr, this, SWIGTYPE_p_vectorT_openpad__ControlObject_p_t.getCPtr(value));
+  public void setControls(SWIGTYPE_p_std__vectorT_openpad__ControlObject_p_t value) {
+    openpadJNI.PadConfig_controls_set(swigCPtr, this, SWIGTYPE_p_std__vectorT_openpad__ControlObject_p_t.getCPtr(value));
   }
 
-  public SWIGTYPE_p_vectorT_openpad__ControlObject_p_t getControls() {
+  public SWIGTYPE_p_std__vectorT_openpad__ControlObject_p_t getControls() {
     long cPtr = openpadJNI.PadConfig_controls_get(swigCPtr, this);
-    return (cPtr == 0) ? null : new SWIGTYPE_p_vectorT_openpad__ControlObject_p_t(cPtr, false);
+    return (cPtr == 0) ? null : new SWIGTYPE_p_std__vectorT_openpad__ControlObject_p_t(cPtr, false);
   }
 
   public void setBgimg(SWIGTYPE_p_string value) {
