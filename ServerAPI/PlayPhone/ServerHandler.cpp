@@ -24,6 +24,10 @@ string ServerHandler::getDesc(){
     return "";
 }
 
+string ServerHandler::getIconFilePath(){
+    return "";
+}
+
 int ServerHandler::getFilledSlots(){
     return 0;
 }

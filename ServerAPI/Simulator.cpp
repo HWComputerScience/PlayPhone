@@ -51,7 +51,7 @@ void sendDisconnectReq(){
 
 void handle(const char* msg, int len){
     mut.lock();
-    if(OP_DEBUG)cout << "simulator got: " << msg << endl;
+//    if(OP_DEBUG)cout << "simulator got: " << msg << endl;
     mut.unlock();
 }
 
@@ -86,7 +86,7 @@ void simulate(){
             currentPort++;
         }
     }
-    if(OP_DEBUG)printf("Simulator connected on port %d\n", currentPort);
+//    if(OP_DEBUG)printf("Simulator connected on port %d\n", currentPort);
     
     thread t(getResponses);
     t.detach();
@@ -96,8 +96,8 @@ void simulate(){
     id1.username = "j_lennon";
     id1.phoneid = "a";
     sendDiscovReq(id1);
-    sendJoinReq();
-    sendDisconnectReq();
+//    sendJoinReq();
+//    sendDisconnectReq();
     
     sleep(2);
 }

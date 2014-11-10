@@ -27,6 +27,7 @@ namespace openpad {
         virtual bool canJoin(Client* cli, string& why);
         virtual string getName();
         virtual string getDesc();
+        virtual string getIconFilePath();
         virtual int getFilledSlots();
         virtual int getOpenSlots();
         virtual void onJoin(Client* cli);

@@ -12,6 +12,7 @@
 #include "Server.h"
 #include "Request.h"
 #include "ServerHandler.h"
+#include "Util.h"
 
 #define OP_DEBUG 1
 #define BUFFER_LENGTH 1024

@@ -36,6 +36,10 @@ string DebugGame::getDesc(){
     return "Game program to debug openpad server";
 }
 
+string DebugGame::getIconFilePath(){
+    return "DebugSmall.png";
+}
+
 int DebugGame::getFilledSlots(){
     return numPlayers;
 }
