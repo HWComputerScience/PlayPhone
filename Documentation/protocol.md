@@ -230,6 +230,7 @@ These JSON objects are referenced in the above protocol specification.
     },
     "id":#               /* The ID of this control */
     "img":<base64>       /* Optional: an image (.png) to skin the control with */
+    /* if this control is a button, it has a "btntype" value (0=>A, 1=>B, 2=>X, 3=>Y) */
 }
 ```
 

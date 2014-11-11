@@ -101,6 +101,7 @@ namespace openpad {
     public:
         Value& serializeJSON(Document::AllocatorType& a);
         bool parseJSON(Value& v);
+        void addControl(ControlObject* c);
         
         vector<ControlObject*> controls;
         string bgimg;

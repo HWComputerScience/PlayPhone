@@ -227,6 +227,10 @@ bool PadConfig::parseJSON(Value &v){
     return true;
 }
 
+void PadConfig::addControl(openpad::ControlObject *c){
+    controls.push_back(c);
+}
+
 bool PadUpdateObject::parseJSON(Value &v){
     try {
         action = v["action"].GetInt();
