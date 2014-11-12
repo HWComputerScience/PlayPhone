@@ -595,6 +595,12 @@ namespace Swig {
 
 }
 
+namespace Swig {
+  namespace {
+    jclass jclass_openpadJNI = NULL;
+    jmethodID director_methids[11];
+  }
+}
 
 #include "../PlayPhone/openpad.h"
 
@@ -615,6 +621,406 @@ namespace Swig {
  * --------------------------------------------------- */
 
 #include "openpad_wrap.h"
+
+SwigDirector_ServerHandler::SwigDirector_ServerHandler(JNIEnv *jenv) : openpad::ServerHandler(), Swig::Director(jenv) {
+}
+
+void SwigDirector_ServerHandler::onStart() {
+  JNIEnvWrapper swigjnienv(this) ;
+  JNIEnv * jenv = swigjnienv.getJNIEnv() ;
+  jobject swigjobj = (jobject) NULL ;
+  
+  if (!swig_override[0]) {
+    openpad::ServerHandler::onStart();
+    return;
+  }
+  swigjobj = swig_get_self(jenv);
+  if (swigjobj && jenv->IsSameObject(swigjobj, NULL) == JNI_FALSE) {
+    jenv->CallStaticVoidMethod(Swig::jclass_openpadJNI, Swig::director_methids[0], swigjobj);
+    jthrowable swigerror = jenv->ExceptionOccurred();
+    if (swigerror) {
+      jenv->ExceptionClear();
+      throw Swig::DirectorException(jenv, swigerror);
+    }
+    
+  } else {
+    SWIG_JavaThrowException(jenv, SWIG_JavaNullPointerException, "null upcall object in openpad::ServerHandler::onStart ");
+  }
+  if (swigjobj) jenv->DeleteLocalRef(swigjobj);
+}
+
+bool SwigDirector_ServerHandler::canJoin(openpad::Client *cli, std::string &why) {
+  bool c_result = SwigValueInit< bool >() ;
+  jboolean jresult = 0 ;
+  JNIEnvWrapper swigjnienv(this) ;
+  JNIEnv * jenv = swigjnienv.getJNIEnv() ;
+  jobject swigjobj = (jobject) NULL ;
+  jlong jcli = 0 ;
+  jlong jwhy = 0 ;
+  
+  if (!swig_override[1]) {
+    return openpad::ServerHandler::canJoin(cli,why);
+  }
+  swigjobj = swig_get_self(jenv);
+  if (swigjobj && jenv->IsSameObject(swigjobj, NULL) == JNI_FALSE) {
+    *((openpad::Client **)&jcli) = (openpad::Client *) cli; 
+    *(std::string **)&jwhy = (std::string *) &why; 
+    jresult = (jboolean) jenv->CallStaticBooleanMethod(Swig::jclass_openpadJNI, Swig::director_methids[1], swigjobj, jcli, jwhy);
+    jthrowable swigerror = jenv->ExceptionOccurred();
+    if (swigerror) {
+      jenv->ExceptionClear();
+      throw Swig::DirectorException(jenv, swigerror);
+    }
+    
+    c_result = jresult ? true : false; 
+  } else {
+    SWIG_JavaThrowException(jenv, SWIG_JavaNullPointerException, "null upcall object in openpad::ServerHandler::canJoin ");
+  }
+  if (swigjobj) jenv->DeleteLocalRef(swigjobj);
+  return c_result;
+}
+
+std::string SwigDirector_ServerHandler::getName() {
+  std::string c_result ;
+  jstring jresult = 0 ;
+  JNIEnvWrapper swigjnienv(this) ;
+  JNIEnv * jenv = swigjnienv.getJNIEnv() ;
+  jobject swigjobj = (jobject) NULL ;
+  
+  if (!swig_override[2]) {
+    return openpad::ServerHandler::getName();
+  }
+  swigjobj = swig_get_self(jenv);
+  if (swigjobj && jenv->IsSameObject(swigjobj, NULL) == JNI_FALSE) {
+    jresult = (jstring) jenv->CallStaticObjectMethod(Swig::jclass_openpadJNI, Swig::director_methids[2], swigjobj);
+    jthrowable swigerror = jenv->ExceptionOccurred();
+    if (swigerror) {
+      jenv->ExceptionClear();
+      throw Swig::DirectorException(jenv, swigerror);
+    }
+    
+    if(!jresult) {
+      if (!jenv->ExceptionCheck()) {
+        SWIG_JavaThrowException(jenv, SWIG_JavaNullPointerException, "null string");
+      }
+      return c_result;
+    } 
+    const char *c_result_pstr = (const char *)jenv->GetStringUTFChars(jresult, 0); 
+    if (!c_result_pstr) return c_result;
+    c_result.assign(c_result_pstr);
+    jenv->ReleaseStringUTFChars(jresult, c_result_pstr); 
+  } else {
+    SWIG_JavaThrowException(jenv, SWIG_JavaNullPointerException, "null upcall object in openpad::ServerHandler::getName ");
+  }
+  if (swigjobj) jenv->DeleteLocalRef(swigjobj);
+  return c_result;
+}
+
+std::string SwigDirector_ServerHandler::getDesc() {
+  std::string c_result ;
+  jstring jresult = 0 ;
+  JNIEnvWrapper swigjnienv(this) ;
+  JNIEnv * jenv = swigjnienv.getJNIEnv() ;
+  jobject swigjobj = (jobject) NULL ;
+  
+  if (!swig_override[3]) {
+    return openpad::ServerHandler::getDesc();
+  }
+  swigjobj = swig_get_self(jenv);
+  if (swigjobj && jenv->IsSameObject(swigjobj, NULL) == JNI_FALSE) {
+    jresult = (jstring) jenv->CallStaticObjectMethod(Swig::jclass_openpadJNI, Swig::director_methids[3], swigjobj);
+    jthrowable swigerror = jenv->ExceptionOccurred();
+    if (swigerror) {
+      jenv->ExceptionClear();
+      throw Swig::DirectorException(jenv, swigerror);
+    }
+    
+    if(!jresult) {
+      if (!jenv->ExceptionCheck()) {
+        SWIG_JavaThrowException(jenv, SWIG_JavaNullPointerException, "null string");
+      }
+      return c_result;
+    } 
+    const char *c_result_pstr = (const char *)jenv->GetStringUTFChars(jresult, 0); 
+    if (!c_result_pstr) return c_result;
+    c_result.assign(c_result_pstr);
+    jenv->ReleaseStringUTFChars(jresult, c_result_pstr); 
+  } else {
+    SWIG_JavaThrowException(jenv, SWIG_JavaNullPointerException, "null upcall object in openpad::ServerHandler::getDesc ");
+  }
+  if (swigjobj) jenv->DeleteLocalRef(swigjobj);
+  return c_result;
+}
+
+std::string SwigDirector_ServerHandler::getIconFilePath() {
+  std::string c_result ;
+  jstring jresult = 0 ;
+  JNIEnvWrapper swigjnienv(this) ;
+  JNIEnv * jenv = swigjnienv.getJNIEnv() ;
+  jobject swigjobj = (jobject) NULL ;
+  
+  if (!swig_override[4]) {
+    return openpad::ServerHandler::getIconFilePath();
+  }
+  swigjobj = swig_get_self(jenv);
+  if (swigjobj && jenv->IsSameObject(swigjobj, NULL) == JNI_FALSE) {
+    jresult = (jstring) jenv->CallStaticObjectMethod(Swig::jclass_openpadJNI, Swig::director_methids[4], swigjobj);
+    jthrowable swigerror = jenv->ExceptionOccurred();
+    if (swigerror) {
+      jenv->ExceptionClear();
+      throw Swig::DirectorException(jenv, swigerror);
+    }
+    
+    if(!jresult) {
+      if (!jenv->ExceptionCheck()) {
+        SWIG_JavaThrowException(jenv, SWIG_JavaNullPointerException, "null string");
+      }
+      return c_result;
+    } 
+    const char *c_result_pstr = (const char *)jenv->GetStringUTFChars(jresult, 0); 
+    if (!c_result_pstr) return c_result;
+    c_result.assign(c_result_pstr);
+    jenv->ReleaseStringUTFChars(jresult, c_result_pstr); 
+  } else {
+    SWIG_JavaThrowException(jenv, SWIG_JavaNullPointerException, "null upcall object in openpad::ServerHandler::getIconFilePath ");
+  }
+  if (swigjobj) jenv->DeleteLocalRef(swigjobj);
+  return c_result;
+}
+
+int SwigDirector_ServerHandler::getFilledSlots() {
+  int c_result = SwigValueInit< int >() ;
+  jint jresult = 0 ;
+  JNIEnvWrapper swigjnienv(this) ;
+  JNIEnv * jenv = swigjnienv.getJNIEnv() ;
+  jobject swigjobj = (jobject) NULL ;
+  
+  if (!swig_override[5]) {
+    return openpad::ServerHandler::getFilledSlots();
+  }
+  swigjobj = swig_get_self(jenv);
+  if (swigjobj && jenv->IsSameObject(swigjobj, NULL) == JNI_FALSE) {
+    jresult = (jint) jenv->CallStaticIntMethod(Swig::jclass_openpadJNI, Swig::director_methids[5], swigjobj);
+    jthrowable swigerror = jenv->ExceptionOccurred();
+    if (swigerror) {
+      jenv->ExceptionClear();
+      throw Swig::DirectorException(jenv, swigerror);
+    }
+    
+    c_result = (int)jresult; 
+  } else {
+    SWIG_JavaThrowException(jenv, SWIG_JavaNullPointerException, "null upcall object in openpad::ServerHandler::getFilledSlots ");
+  }
+  if (swigjobj) jenv->DeleteLocalRef(swigjobj);
+  return c_result;
+}
+
+int SwigDirector_ServerHandler::getOpenSlots() {
+  int c_result = SwigValueInit< int >() ;
+  jint jresult = 0 ;
+  JNIEnvWrapper swigjnienv(this) ;
+  JNIEnv * jenv = swigjnienv.getJNIEnv() ;
+  jobject swigjobj = (jobject) NULL ;
+  
+  if (!swig_override[6]) {
+    return openpad::ServerHandler::getOpenSlots();
+  }
+  swigjobj = swig_get_self(jenv);
+  if (swigjobj && jenv->IsSameObject(swigjobj, NULL) == JNI_FALSE) {
+    jresult = (jint) jenv->CallStaticIntMethod(Swig::jclass_openpadJNI, Swig::director_methids[6], swigjobj);
+    jthrowable swigerror = jenv->ExceptionOccurred();
+    if (swigerror) {
+      jenv->ExceptionClear();
+      throw Swig::DirectorException(jenv, swigerror);
+    }
+    
+    c_result = (int)jresult; 
+  } else {
+    SWIG_JavaThrowException(jenv, SWIG_JavaNullPointerException, "null upcall object in openpad::ServerHandler::getOpenSlots ");
+  }
+  if (swigjobj) jenv->DeleteLocalRef(swigjobj);
+  return c_result;
+}
+
+void SwigDirector_ServerHandler::onJoin(openpad::Client *cli) {
+  JNIEnvWrapper swigjnienv(this) ;
+  JNIEnv * jenv = swigjnienv.getJNIEnv() ;
+  jobject swigjobj = (jobject) NULL ;
+  jlong jcli = 0 ;
+  
+  if (!swig_override[7]) {
+    openpad::ServerHandler::onJoin(cli);
+    return;
+  }
+  swigjobj = swig_get_self(jenv);
+  if (swigjobj && jenv->IsSameObject(swigjobj, NULL) == JNI_FALSE) {
+    *((openpad::Client **)&jcli) = (openpad::Client *) cli; 
+    jenv->CallStaticVoidMethod(Swig::jclass_openpadJNI, Swig::director_methids[7], swigjobj, jcli);
+    jthrowable swigerror = jenv->ExceptionOccurred();
+    if (swigerror) {
+      jenv->ExceptionClear();
+      throw Swig::DirectorException(jenv, swigerror);
+    }
+    
+  } else {
+    SWIG_JavaThrowException(jenv, SWIG_JavaNullPointerException, "null upcall object in openpad::ServerHandler::onJoin ");
+  }
+  if (swigjobj) jenv->DeleteLocalRef(swigjobj);
+}
+
+openpad::PadConfig SwigDirector_ServerHandler::getDefaultControls() {
+  openpad::PadConfig c_result ;
+  jlong jresult = 0 ;
+  JNIEnvWrapper swigjnienv(this) ;
+  JNIEnv * jenv = swigjnienv.getJNIEnv() ;
+  jobject swigjobj = (jobject) NULL ;
+  openpad::PadConfig *argp ;
+  
+  if (!swig_override[8]) {
+    return openpad::ServerHandler::getDefaultControls();
+  }
+  swigjobj = swig_get_self(jenv);
+  if (swigjobj && jenv->IsSameObject(swigjobj, NULL) == JNI_FALSE) {
+    jresult = (jlong) jenv->CallStaticLongMethod(Swig::jclass_openpadJNI, Swig::director_methids[8], swigjobj);
+    jthrowable swigerror = jenv->ExceptionOccurred();
+    if (swigerror) {
+      jenv->ExceptionClear();
+      throw Swig::DirectorException(jenv, swigerror);
+    }
+    
+    argp = *(openpad::PadConfig **)&jresult; 
+    if (!argp) {
+      SWIG_JavaThrowException(jenv, SWIG_JavaNullPointerException, "Unexpected null return for type openpad::PadConfig");
+      return c_result;
+    }
+    c_result = *argp; 
+  } else {
+    SWIG_JavaThrowException(jenv, SWIG_JavaNullPointerException, "null upcall object in openpad::ServerHandler::getDefaultControls ");
+  }
+  if (swigjobj) jenv->DeleteLocalRef(swigjobj);
+  return c_result;
+}
+
+void SwigDirector_ServerHandler::onDisconnect(openpad::Client *cli) {
+  JNIEnvWrapper swigjnienv(this) ;
+  JNIEnv * jenv = swigjnienv.getJNIEnv() ;
+  jobject swigjobj = (jobject) NULL ;
+  jlong jcli = 0 ;
+  
+  if (!swig_override[9]) {
+    openpad::ServerHandler::onDisconnect(cli);
+    return;
+  }
+  swigjobj = swig_get_self(jenv);
+  if (swigjobj && jenv->IsSameObject(swigjobj, NULL) == JNI_FALSE) {
+    *((openpad::Client **)&jcli) = (openpad::Client *) cli; 
+    jenv->CallStaticVoidMethod(Swig::jclass_openpadJNI, Swig::director_methids[9], swigjobj, jcli);
+    jthrowable swigerror = jenv->ExceptionOccurred();
+    if (swigerror) {
+      jenv->ExceptionClear();
+      throw Swig::DirectorException(jenv, swigerror);
+    }
+    
+  } else {
+    SWIG_JavaThrowException(jenv, SWIG_JavaNullPointerException, "null upcall object in openpad::ServerHandler::onDisconnect ");
+  }
+  if (swigjobj) jenv->DeleteLocalRef(swigjobj);
+}
+
+void SwigDirector_ServerHandler::onPadUpdate(openpad::Client *cli, openpad::PadUpdateObject update) {
+  JNIEnvWrapper swigjnienv(this) ;
+  JNIEnv * jenv = swigjnienv.getJNIEnv() ;
+  jobject swigjobj = (jobject) NULL ;
+  jlong jcli = 0 ;
+  jlong jupdate  ;
+  
+  if (!swig_override[10]) {
+    openpad::ServerHandler::onPadUpdate(cli,update);
+    return;
+  }
+  swigjobj = swig_get_self(jenv);
+  if (swigjobj && jenv->IsSameObject(swigjobj, NULL) == JNI_FALSE) {
+    *((openpad::Client **)&jcli) = (openpad::Client *) cli; 
+    jupdate = 0;
+    *((openpad::PadUpdateObject **)&jupdate) = &update; 
+    jenv->CallStaticVoidMethod(Swig::jclass_openpadJNI, Swig::director_methids[10], swigjobj, jcli, jupdate);
+    jthrowable swigerror = jenv->ExceptionOccurred();
+    if (swigerror) {
+      jenv->ExceptionClear();
+      throw Swig::DirectorException(jenv, swigerror);
+    }
+    
+  } else {
+    SWIG_JavaThrowException(jenv, SWIG_JavaNullPointerException, "null upcall object in openpad::ServerHandler::onPadUpdate ");
+  }
+  if (swigjobj) jenv->DeleteLocalRef(swigjobj);
+}
+
+void SwigDirector_ServerHandler::swig_connect_director(JNIEnv *jenv, jobject jself, jclass jcls, bool swig_mem_own, bool weak_global) {
+  static struct {
+    const char *mname;
+    const char *mdesc;
+    jmethodID base_methid;
+  } methods[] = {
+    {
+      "onStart", "()V", NULL 
+    },
+    {
+      "canJoin", "(Lcom/openpad/server/Client;Lcom/openpad/server/SWIGTYPE_p_std__string;)Z", NULL 
+    },
+    {
+      "getName", "()Ljava/lang/String;", NULL 
+    },
+    {
+      "getDesc", "()Ljava/lang/String;", NULL 
+    },
+    {
+      "getIconFilePath", "()Ljava/lang/String;", NULL 
+    },
+    {
+      "getFilledSlots", "()I", NULL 
+    },
+    {
+      "getOpenSlots", "()I", NULL 
+    },
+    {
+      "onJoin", "(Lcom/openpad/server/Client;)V", NULL 
+    },
+    {
+      "getDefaultControls", "()Lcom/openpad/server/PadConfig;", NULL 
+    },
+    {
+      "onDisconnect", "(Lcom/openpad/server/Client;)V", NULL 
+    },
+    {
+      "onPadUpdate", "(Lcom/openpad/server/Client;Lcom/openpad/server/PadUpdateObject;)V", NULL 
+    }
+  };
+  
+  static jclass baseclass = 0 ;
+  
+  if (swig_set_self(jenv, jself, swig_mem_own, weak_global)) {
+    if (!baseclass) {
+      baseclass = jenv->FindClass("com/openpad/server/ServerHandler");
+      if (!baseclass) return;
+      baseclass = (jclass) jenv->NewGlobalRef(baseclass);
+    }
+    bool derived = (jenv->IsSameObject(baseclass, jcls) ? false : true);
+    for (int i = 0; i < 11; ++i) {
+      if (!methods[i].base_methid) {
+        methods[i].base_methid = jenv->GetMethodID(baseclass, methods[i].mname, methods[i].mdesc);
+        if (!methods[i].base_methid) return;
+      }
+      swig_override[i] = false;
+      if (derived) {
+        jmethodID methid = jenv->GetMethodID(jcls, methods[i].mname, methods[i].mdesc);
+        swig_override[i] = (methid != methods[i].base_methid);
+        jenv->ExceptionClear();
+      }
+    }
+  }
+}
+
 
 
 #ifdef __cplusplus
@@ -1051,6 +1457,21 @@ SWIGEXPORT void JNICALL Java_com_openpad_server_openpadJNI_Client_1run(JNIEnv *j
 }
 
 
+SWIGEXPORT jlong JNICALL Java_com_openpad_server_openpadJNI_Client_1getID(JNIEnv *jenv, jclass jcls, jlong jarg1, jobject jarg1_) {
+  jlong jresult = 0 ;
+  openpad::Client *arg1 = (openpad::Client *) 0 ;
+  openpad::IDObject *result = 0 ;
+  
+  (void)jenv;
+  (void)jcls;
+  (void)jarg1_;
+  arg1 = *(openpad::Client **)&jarg1; 
+  result = (openpad::IDObject *) &(arg1)->getID();
+  *(openpad::IDObject **)&jresult = result; 
+  return jresult;
+}
+
+
 SWIGEXPORT void JNICALL Java_com_openpad_server_openpadJNI_Client_1setControls(JNIEnv *jenv, jclass jcls, jlong jarg1, jobject jarg1_, jlong jarg2, jobject jarg2_) {
   openpad::Client *arg1 = (openpad::Client *) 0 ;
   openpad::ControlObject *arg2 = 0 ;
@@ -1274,31 +1695,6 @@ SWIGEXPORT void JNICALL Java_com_openpad_server_openpadJNI_Server_1setControls(J
 }
 
 
-SWIGEXPORT jlong JNICALL Java_com_openpad_server_openpadJNI_Server_1handleRequest(JNIEnv *jenv, jclass jcls, jlong jarg1, jobject jarg1_, jlong jarg2, jobject jarg2_, jlong jarg3, jobject jarg3_) {
-  jlong jresult = 0 ;
-  openpad::Server *arg1 = (openpad::Server *) 0 ;
-  openpad::Request *arg2 = 0 ;
-  openpad::Client *arg3 = (openpad::Client *) 0 ;
-  openpad::Response result;
-  
-  (void)jenv;
-  (void)jcls;
-  (void)jarg1_;
-  (void)jarg2_;
-  (void)jarg3_;
-  arg1 = *(openpad::Server **)&jarg1; 
-  arg2 = *(openpad::Request **)&jarg2;
-  if (!arg2) {
-    SWIG_JavaThrowException(jenv, SWIG_JavaNullPointerException, "openpad::Request & reference is null");
-    return 0;
-  } 
-  arg3 = *(openpad::Client **)&jarg3; 
-  result = (arg1)->handleRequest(*arg2,arg3);
-  *(openpad::Response **)&jresult = new openpad::Response((const openpad::Response &)result); 
-  return jresult;
-}
-
-
 SWIGEXPORT void JNICALL Java_com_openpad_server_openpadJNI_Server_1handleResponse(JNIEnv *jenv, jclass jcls, jlong jarg1, jobject jarg1_, jlong jarg2, jobject jarg2_, jlong jarg3, jobject jarg3_) {
   openpad::Server *arg1 = (openpad::Server *) 0 ;
   openpad::Response *arg2 = 0 ;
@@ -1380,40 +1776,6 @@ SWIGEXPORT jstring JNICALL Java_com_openpad_server_openpadJNI_Serializable_1getJ
   arg1 = *(openpad::Serializable **)&jarg1; 
   result = (char *)(arg1)->getJSONString();
   if (result) jresult = jenv->NewStringUTF((const char *)result);
-  return jresult;
-}
-
-
-SWIGEXPORT void JNICALL Java_com_openpad_server_openpadJNI_Serializable_1JSONvalue_1set(JNIEnv *jenv, jclass jcls, jlong jarg1, jobject jarg1_, jlong jarg2) {
-  openpad::Serializable *arg1 = (openpad::Serializable *) 0 ;
-  Value arg2 ;
-  Value *argp2 ;
-  
-  (void)jenv;
-  (void)jcls;
-  (void)jarg1_;
-  arg1 = *(openpad::Serializable **)&jarg1; 
-  argp2 = *(Value **)&jarg2; 
-  if (!argp2) {
-    SWIG_JavaThrowException(jenv, SWIG_JavaNullPointerException, "Attempt to dereference null Value");
-    return ;
-  }
-  arg2 = *argp2; 
-  if (arg1) (arg1)->JSONvalue = arg2;
-}
-
-
-SWIGEXPORT jlong JNICALL Java_com_openpad_server_openpadJNI_Serializable_1JSONvalue_1get(JNIEnv *jenv, jclass jcls, jlong jarg1, jobject jarg1_) {
-  jlong jresult = 0 ;
-  openpad::Serializable *arg1 = (openpad::Serializable *) 0 ;
-  Value result;
-  
-  (void)jenv;
-  (void)jcls;
-  (void)jarg1_;
-  arg1 = *(openpad::Serializable **)&jarg1; 
-  result =  ((arg1)->JSONvalue);
-  *(Value **)&jresult = new Value((const Value &)result); 
   return jresult;
 }
 
@@ -2649,6 +3011,37 @@ SWIGEXPORT void JNICALL Java_com_openpad_server_openpadJNI_delete_1ControlObject
 }
 
 
+SWIGEXPORT jlong JNICALL Java_com_openpad_server_openpadJNI_new_1PadConfig_1_1SWIG_10(JNIEnv *jenv, jclass jcls) {
+  jlong jresult = 0 ;
+  openpad::PadConfig *result = 0 ;
+  
+  (void)jenv;
+  (void)jcls;
+  result = (openpad::PadConfig *)new openpad::PadConfig();
+  *(openpad::PadConfig **)&jresult = result; 
+  return jresult;
+}
+
+
+SWIGEXPORT jlong JNICALL Java_com_openpad_server_openpadJNI_new_1PadConfig_1_1SWIG_11(JNIEnv *jenv, jclass jcls, jlong jarg1, jobject jarg1_) {
+  jlong jresult = 0 ;
+  openpad::PadConfig *arg1 = 0 ;
+  openpad::PadConfig *result = 0 ;
+  
+  (void)jenv;
+  (void)jcls;
+  (void)jarg1_;
+  arg1 = *(openpad::PadConfig **)&jarg1;
+  if (!arg1) {
+    SWIG_JavaThrowException(jenv, SWIG_JavaNullPointerException, "openpad::PadConfig const & reference is null");
+    return 0;
+  } 
+  result = (openpad::PadConfig *)new openpad::PadConfig((openpad::PadConfig const &)*arg1);
+  *(openpad::PadConfig **)&jresult = result; 
+  return jresult;
+}
+
+
 SWIGEXPORT jlong JNICALL Java_com_openpad_server_openpadJNI_PadConfig_1serializeJSON(JNIEnv *jenv, jclass jcls, jlong jarg1, jobject jarg1_, jlong jarg2) {
   jlong jresult = 0 ;
   openpad::PadConfig *arg1 = (openpad::PadConfig *) 0 ;
@@ -3115,11 +3508,23 @@ SWIGEXPORT void JNICALL Java_com_openpad_server_openpadJNI_ServerHandler_1onStar
 }
 
 
-SWIGEXPORT jboolean JNICALL Java_com_openpad_server_openpadJNI_ServerHandler_1canJoin(JNIEnv *jenv, jclass jcls, jlong jarg1, jobject jarg1_, jlong jarg2, jobject jarg2_, jlong jarg3) {
+SWIGEXPORT void JNICALL Java_com_openpad_server_openpadJNI_ServerHandler_1onStartSwigExplicitServerHandler(JNIEnv *jenv, jclass jcls, jlong jarg1, jobject jarg1_) {
+  openpad::ServerHandler *arg1 = (openpad::ServerHandler *) 0 ;
+  
+  (void)jenv;
+  (void)jcls;
+  (void)jarg1_;
+  arg1 = *(openpad::ServerHandler **)&jarg1; 
+  (arg1)->openpad::ServerHandler::onStart();
+}
+
+
+SWIGEXPORT jboolean JNICALL Java_com_openpad_server_openpadJNI_ServerHandler_1canJoin(JNIEnv *jenv, jclass jcls, jlong jarg1, jobject jarg1_, jlong jarg2, jobject jarg2_, jobjectArray jarg3) {
   jboolean jresult = 0 ;
   openpad::ServerHandler *arg1 = (openpad::ServerHandler *) 0 ;
   openpad::Client *arg2 = (openpad::Client *) 0 ;
   std::string *arg3 = 0 ;
+  std::string strTemp3 ;
   bool result;
   
   (void)jenv;
@@ -3128,13 +3533,82 @@ SWIGEXPORT jboolean JNICALL Java_com_openpad_server_openpadJNI_ServerHandler_1ca
   (void)jarg2_;
   arg1 = *(openpad::ServerHandler **)&jarg1; 
   arg2 = *(openpad::Client **)&jarg2; 
-  arg3 = *(std::string **)&jarg3;
-  if (!arg3) {
-    SWIG_JavaThrowException(jenv, SWIG_JavaNullPointerException, "std::string & reference is null");
-    return 0;
-  } 
+  {
+    if (!jarg3) {
+      SWIG_JavaThrowException(jenv, SWIG_JavaNullPointerException, "array null");
+      return 0;
+    }
+    if (jenv->GetArrayLength(jarg3) == 0) {
+      SWIG_JavaThrowException(jenv, SWIG_JavaIndexOutOfBoundsException, "Array must contain at least 1 element");
+      return 0;
+    }
+    
+    jobject oInput = jenv->GetObjectArrayElement(jarg3, 0); 
+    if ( NULL != oInput ) {
+      jstring sInput = static_cast<jstring>( oInput );
+      
+      const char * arg3_pstr = (const char *)jenv->GetStringUTFChars(sInput, 0); 
+      if (!arg3_pstr) return 0;
+      strTemp3.assign( arg3_pstr );
+      jenv->ReleaseStringUTFChars( sInput, arg3_pstr);  
+    }
+    
+    arg3 = &strTemp3;
+  }
   result = (bool)(arg1)->canJoin(arg2,*arg3);
   jresult = (jboolean)result; 
+  {
+    jstring jStrTemp = jenv->NewStringUTF( strTemp3.c_str() );
+    jenv->SetObjectArrayElement(jarg3, 0, jStrTemp); 
+  }
+  
+  return jresult;
+}
+
+
+SWIGEXPORT jboolean JNICALL Java_com_openpad_server_openpadJNI_ServerHandler_1canJoinSwigExplicitServerHandler(JNIEnv *jenv, jclass jcls, jlong jarg1, jobject jarg1_, jlong jarg2, jobject jarg2_, jobjectArray jarg3) {
+  jboolean jresult = 0 ;
+  openpad::ServerHandler *arg1 = (openpad::ServerHandler *) 0 ;
+  openpad::Client *arg2 = (openpad::Client *) 0 ;
+  std::string *arg3 = 0 ;
+  std::string strTemp3 ;
+  bool result;
+  
+  (void)jenv;
+  (void)jcls;
+  (void)jarg1_;
+  (void)jarg2_;
+  arg1 = *(openpad::ServerHandler **)&jarg1; 
+  arg2 = *(openpad::Client **)&jarg2; 
+  {
+    if (!jarg3) {
+      SWIG_JavaThrowException(jenv, SWIG_JavaNullPointerException, "array null");
+      return 0;
+    }
+    if (jenv->GetArrayLength(jarg3) == 0) {
+      SWIG_JavaThrowException(jenv, SWIG_JavaIndexOutOfBoundsException, "Array must contain at least 1 element");
+      return 0;
+    }
+    
+    jobject oInput = jenv->GetObjectArrayElement(jarg3, 0); 
+    if ( NULL != oInput ) {
+      jstring sInput = static_cast<jstring>( oInput );
+      
+      const char * arg3_pstr = (const char *)jenv->GetStringUTFChars(sInput, 0); 
+      if (!arg3_pstr) return 0;
+      strTemp3.assign( arg3_pstr );
+      jenv->ReleaseStringUTFChars( sInput, arg3_pstr);  
+    }
+    
+    arg3 = &strTemp3;
+  }
+  result = (bool)(arg1)->openpad::ServerHandler::canJoin(arg2,*arg3);
+  jresult = (jboolean)result; 
+  {
+    jstring jStrTemp = jenv->NewStringUTF( strTemp3.c_str() );
+    jenv->SetObjectArrayElement(jarg3, 0, jStrTemp); 
+  }
+  
   return jresult;
 }
 
@@ -3149,6 +3623,21 @@ SWIGEXPORT jstring JNICALL Java_com_openpad_server_openpadJNI_ServerHandler_1get
   (void)jarg1_;
   arg1 = *(openpad::ServerHandler **)&jarg1; 
   result = (arg1)->getName();
+  jresult = jenv->NewStringUTF((&result)->c_str()); 
+  return jresult;
+}
+
+
+SWIGEXPORT jstring JNICALL Java_com_openpad_server_openpadJNI_ServerHandler_1getNameSwigExplicitServerHandler(JNIEnv *jenv, jclass jcls, jlong jarg1, jobject jarg1_) {
+  jstring jresult = 0 ;
+  openpad::ServerHandler *arg1 = (openpad::ServerHandler *) 0 ;
+  std::string result;
+  
+  (void)jenv;
+  (void)jcls;
+  (void)jarg1_;
+  arg1 = *(openpad::ServerHandler **)&jarg1; 
+  result = (arg1)->openpad::ServerHandler::getName();
   jresult = jenv->NewStringUTF((&result)->c_str()); 
   return jresult;
 }
@@ -3169,6 +3658,21 @@ SWIGEXPORT jstring JNICALL Java_com_openpad_server_openpadJNI_ServerHandler_1get
 }
 
 
+SWIGEXPORT jstring JNICALL Java_com_openpad_server_openpadJNI_ServerHandler_1getDescSwigExplicitServerHandler(JNIEnv *jenv, jclass jcls, jlong jarg1, jobject jarg1_) {
+  jstring jresult = 0 ;
+  openpad::ServerHandler *arg1 = (openpad::ServerHandler *) 0 ;
+  std::string result;
+  
+  (void)jenv;
+  (void)jcls;
+  (void)jarg1_;
+  arg1 = *(openpad::ServerHandler **)&jarg1; 
+  result = (arg1)->openpad::ServerHandler::getDesc();
+  jresult = jenv->NewStringUTF((&result)->c_str()); 
+  return jresult;
+}
+
+
 SWIGEXPORT jstring JNICALL Java_com_openpad_server_openpadJNI_ServerHandler_1getIconFilePath(JNIEnv *jenv, jclass jcls, jlong jarg1, jobject jarg1_) {
   jstring jresult = 0 ;
   openpad::ServerHandler *arg1 = (openpad::ServerHandler *) 0 ;
@@ -3179,6 +3683,21 @@ SWIGEXPORT jstring JNICALL Java_com_openpad_server_openpadJNI_ServerHandler_1get
   (void)jarg1_;
   arg1 = *(openpad::ServerHandler **)&jarg1; 
   result = (arg1)->getIconFilePath();
+  jresult = jenv->NewStringUTF((&result)->c_str()); 
+  return jresult;
+}
+
+
+SWIGEXPORT jstring JNICALL Java_com_openpad_server_openpadJNI_ServerHandler_1getIconFilePathSwigExplicitServerHandler(JNIEnv *jenv, jclass jcls, jlong jarg1, jobject jarg1_) {
+  jstring jresult = 0 ;
+  openpad::ServerHandler *arg1 = (openpad::ServerHandler *) 0 ;
+  std::string result;
+  
+  (void)jenv;
+  (void)jcls;
+  (void)jarg1_;
+  arg1 = *(openpad::ServerHandler **)&jarg1; 
+  result = (arg1)->openpad::ServerHandler::getIconFilePath();
   jresult = jenv->NewStringUTF((&result)->c_str()); 
   return jresult;
 }
@@ -3199,6 +3718,21 @@ SWIGEXPORT jint JNICALL Java_com_openpad_server_openpadJNI_ServerHandler_1getFil
 }
 
 
+SWIGEXPORT jint JNICALL Java_com_openpad_server_openpadJNI_ServerHandler_1getFilledSlotsSwigExplicitServerHandler(JNIEnv *jenv, jclass jcls, jlong jarg1, jobject jarg1_) {
+  jint jresult = 0 ;
+  openpad::ServerHandler *arg1 = (openpad::ServerHandler *) 0 ;
+  int result;
+  
+  (void)jenv;
+  (void)jcls;
+  (void)jarg1_;
+  arg1 = *(openpad::ServerHandler **)&jarg1; 
+  result = (int)(arg1)->openpad::ServerHandler::getFilledSlots();
+  jresult = (jint)result; 
+  return jresult;
+}
+
+
 SWIGEXPORT jint JNICALL Java_com_openpad_server_openpadJNI_ServerHandler_1getOpenSlots(JNIEnv *jenv, jclass jcls, jlong jarg1, jobject jarg1_) {
   jint jresult = 0 ;
   openpad::ServerHandler *arg1 = (openpad::ServerHandler *) 0 ;
@@ -3209,6 +3743,21 @@ SWIGEXPORT jint JNICALL Java_com_openpad_server_openpadJNI_ServerHandler_1getOpe
   (void)jarg1_;
   arg1 = *(openpad::ServerHandler **)&jarg1; 
   result = (int)(arg1)->getOpenSlots();
+  jresult = (jint)result; 
+  return jresult;
+}
+
+
+SWIGEXPORT jint JNICALL Java_com_openpad_server_openpadJNI_ServerHandler_1getOpenSlotsSwigExplicitServerHandler(JNIEnv *jenv, jclass jcls, jlong jarg1, jobject jarg1_) {
+  jint jresult = 0 ;
+  openpad::ServerHandler *arg1 = (openpad::ServerHandler *) 0 ;
+  int result;
+  
+  (void)jenv;
+  (void)jcls;
+  (void)jarg1_;
+  arg1 = *(openpad::ServerHandler **)&jarg1; 
+  result = (int)(arg1)->openpad::ServerHandler::getOpenSlots();
   jresult = (jint)result; 
   return jresult;
 }
@@ -3228,16 +3777,45 @@ SWIGEXPORT void JNICALL Java_com_openpad_server_openpadJNI_ServerHandler_1onJoin
 }
 
 
+SWIGEXPORT void JNICALL Java_com_openpad_server_openpadJNI_ServerHandler_1onJoinSwigExplicitServerHandler(JNIEnv *jenv, jclass jcls, jlong jarg1, jobject jarg1_, jlong jarg2, jobject jarg2_) {
+  openpad::ServerHandler *arg1 = (openpad::ServerHandler *) 0 ;
+  openpad::Client *arg2 = (openpad::Client *) 0 ;
+  
+  (void)jenv;
+  (void)jcls;
+  (void)jarg1_;
+  (void)jarg2_;
+  arg1 = *(openpad::ServerHandler **)&jarg1; 
+  arg2 = *(openpad::Client **)&jarg2; 
+  (arg1)->openpad::ServerHandler::onJoin(arg2);
+}
+
+
 SWIGEXPORT jlong JNICALL Java_com_openpad_server_openpadJNI_ServerHandler_1getDefaultControls(JNIEnv *jenv, jclass jcls, jlong jarg1, jobject jarg1_) {
   jlong jresult = 0 ;
   openpad::ServerHandler *arg1 = (openpad::ServerHandler *) 0 ;
-  SwigValueWrapper< openpad::PadConfig > result;
+  openpad::PadConfig result;
   
   (void)jenv;
   (void)jcls;
   (void)jarg1_;
   arg1 = *(openpad::ServerHandler **)&jarg1; 
   result = (arg1)->getDefaultControls();
+  *(openpad::PadConfig **)&jresult = new openpad::PadConfig((const openpad::PadConfig &)result); 
+  return jresult;
+}
+
+
+SWIGEXPORT jlong JNICALL Java_com_openpad_server_openpadJNI_ServerHandler_1getDefaultControlsSwigExplicitServerHandler(JNIEnv *jenv, jclass jcls, jlong jarg1, jobject jarg1_) {
+  jlong jresult = 0 ;
+  openpad::ServerHandler *arg1 = (openpad::ServerHandler *) 0 ;
+  openpad::PadConfig result;
+  
+  (void)jenv;
+  (void)jcls;
+  (void)jarg1_;
+  arg1 = *(openpad::ServerHandler **)&jarg1; 
+  result = (arg1)->openpad::ServerHandler::getDefaultControls();
   *(openpad::PadConfig **)&jresult = new openpad::PadConfig((const openpad::PadConfig &)result); 
   return jresult;
 }
@@ -3254,6 +3832,20 @@ SWIGEXPORT void JNICALL Java_com_openpad_server_openpadJNI_ServerHandler_1onDisc
   arg1 = *(openpad::ServerHandler **)&jarg1; 
   arg2 = *(openpad::Client **)&jarg2; 
   (arg1)->onDisconnect(arg2);
+}
+
+
+SWIGEXPORT void JNICALL Java_com_openpad_server_openpadJNI_ServerHandler_1onDisconnectSwigExplicitServerHandler(JNIEnv *jenv, jclass jcls, jlong jarg1, jobject jarg1_, jlong jarg2, jobject jarg2_) {
+  openpad::ServerHandler *arg1 = (openpad::ServerHandler *) 0 ;
+  openpad::Client *arg2 = (openpad::Client *) 0 ;
+  
+  (void)jenv;
+  (void)jcls;
+  (void)jarg1_;
+  (void)jarg2_;
+  arg1 = *(openpad::ServerHandler **)&jarg1; 
+  arg2 = *(openpad::Client **)&jarg2; 
+  (arg1)->openpad::ServerHandler::onDisconnect(arg2);
 }
 
 
@@ -3280,13 +3872,36 @@ SWIGEXPORT void JNICALL Java_com_openpad_server_openpadJNI_ServerHandler_1onPadU
 }
 
 
+SWIGEXPORT void JNICALL Java_com_openpad_server_openpadJNI_ServerHandler_1onPadUpdateSwigExplicitServerHandler(JNIEnv *jenv, jclass jcls, jlong jarg1, jobject jarg1_, jlong jarg2, jobject jarg2_, jlong jarg3, jobject jarg3_) {
+  openpad::ServerHandler *arg1 = (openpad::ServerHandler *) 0 ;
+  openpad::Client *arg2 = (openpad::Client *) 0 ;
+  openpad::PadUpdateObject arg3 ;
+  openpad::PadUpdateObject *argp3 ;
+  
+  (void)jenv;
+  (void)jcls;
+  (void)jarg1_;
+  (void)jarg2_;
+  (void)jarg3_;
+  arg1 = *(openpad::ServerHandler **)&jarg1; 
+  arg2 = *(openpad::Client **)&jarg2; 
+  argp3 = *(openpad::PadUpdateObject **)&jarg3; 
+  if (!argp3) {
+    SWIG_JavaThrowException(jenv, SWIG_JavaNullPointerException, "Attempt to dereference null openpad::PadUpdateObject");
+    return ;
+  }
+  arg3 = *argp3; 
+  (arg1)->openpad::ServerHandler::onPadUpdate(arg2,arg3);
+}
+
+
 SWIGEXPORT jlong JNICALL Java_com_openpad_server_openpadJNI_new_1ServerHandler(JNIEnv *jenv, jclass jcls) {
   jlong jresult = 0 ;
   openpad::ServerHandler *result = 0 ;
   
   (void)jenv;
   (void)jcls;
-  result = (openpad::ServerHandler *)new openpad::ServerHandler();
+  result = (openpad::ServerHandler *)new SwigDirector_ServerHandler(jenv);
   *(openpad::ServerHandler **)&jresult = result; 
   return jresult;
 }
@@ -3299,6 +3914,26 @@ SWIGEXPORT void JNICALL Java_com_openpad_server_openpadJNI_delete_1ServerHandler
   (void)jcls;
   arg1 = *(openpad::ServerHandler **)&jarg1; 
   delete arg1;
+}
+
+
+SWIGEXPORT void JNICALL Java_com_openpad_server_openpadJNI_ServerHandler_1director_1connect(JNIEnv *jenv, jclass jcls, jobject jself, jlong objarg, jboolean jswig_mem_own, jboolean jweak_global) {
+  openpad::ServerHandler *obj = *((openpad::ServerHandler **)&objarg);
+  (void)jcls;
+  SwigDirector_ServerHandler *director = dynamic_cast<SwigDirector_ServerHandler *>(obj);
+  if (director) {
+    director->swig_connect_director(jenv, jself, jenv->GetObjectClass(jself), (jswig_mem_own == JNI_TRUE), (jweak_global == JNI_TRUE));
+  }
+}
+
+
+SWIGEXPORT void JNICALL Java_com_openpad_server_openpadJNI_ServerHandler_1change_1ownership(JNIEnv *jenv, jclass jcls, jobject jself, jlong objarg, jboolean jtake_or_release) {
+  openpad::ServerHandler *obj = *((openpad::ServerHandler **)&objarg);
+  SwigDirector_ServerHandler *director = dynamic_cast<SwigDirector_ServerHandler *>(obj);
+  (void)jcls;
+  if (director) {
+    director->swig_java_change_ownership(jenv, jself, jtake_or_release ? true : false);
+  }
 }
 
 
@@ -3381,6 +4016,56 @@ SWIGEXPORT jlong JNICALL Java_com_openpad_server_openpadJNI_JoystickControl_1SWI
     *(openpad::ControlObject **)&baseptr = *(openpad::JoystickControl **)&jarg1;
     return baseptr;
 }
+
+SWIGEXPORT void JNICALL Java_com_openpad_server_openpadJNI_swig_1module_1init(JNIEnv *jenv, jclass jcls) {
+  int i;
+  
+  static struct {
+    const char *method;
+    const char *signature;
+  } methods[11] = {
+    {
+      "SwigDirector_ServerHandler_onStart", "(Lcom/openpad/server/ServerHandler;)V" 
+    },
+    {
+      "SwigDirector_ServerHandler_canJoin", "(Lcom/openpad/server/ServerHandler;JJ)Z" 
+    },
+    {
+      "SwigDirector_ServerHandler_getName", "(Lcom/openpad/server/ServerHandler;)Ljava/lang/String;" 
+    },
+    {
+      "SwigDirector_ServerHandler_getDesc", "(Lcom/openpad/server/ServerHandler;)Ljava/lang/String;" 
+    },
+    {
+      "SwigDirector_ServerHandler_getIconFilePath", "(Lcom/openpad/server/ServerHandler;)Ljava/lang/String;" 
+    },
+    {
+      "SwigDirector_ServerHandler_getFilledSlots", "(Lcom/openpad/server/ServerHandler;)I" 
+    },
+    {
+      "SwigDirector_ServerHandler_getOpenSlots", "(Lcom/openpad/server/ServerHandler;)I" 
+    },
+    {
+      "SwigDirector_ServerHandler_onJoin", "(Lcom/openpad/server/ServerHandler;J)V" 
+    },
+    {
+      "SwigDirector_ServerHandler_getDefaultControls", "(Lcom/openpad/server/ServerHandler;)J" 
+    },
+    {
+      "SwigDirector_ServerHandler_onDisconnect", "(Lcom/openpad/server/ServerHandler;J)V" 
+    },
+    {
+      "SwigDirector_ServerHandler_onPadUpdate", "(Lcom/openpad/server/ServerHandler;JJ)V" 
+    }
+  };
+  Swig::jclass_openpadJNI = (jclass) jenv->NewGlobalRef(jcls);
+  if (!Swig::jclass_openpadJNI) return;
+  for (i = 0; i < (int) (sizeof(methods)/sizeof(methods[0])); ++i) {
+    Swig::director_methids[i] = jenv->GetStaticMethodID(jcls, methods[i].method, methods[i].signature);
+    if (!Swig::director_methids[i]) return;
+  }
+}
+
 
 #ifdef __cplusplus
 }

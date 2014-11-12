@@ -209,6 +209,20 @@ Value& ControlObject::serializeJSON(Document::AllocatorType &a){
     return JSONvalue;
 }
 
+PadConfig::PadConfig(){
+}
+
+PadConfig::PadConfig(const PadConfig& other){
+    bgimg = other.bgimg;
+    controls = other.controls;
+}
+
+PadConfig& PadConfig::operator=(const openpad::PadConfig &other){
+    bgimg = other.bgimg;
+    controls = other.controls;
+    return *this;
+}
+
 Value& PadConfig::serializeJSON(Document::AllocatorType &a){
     JSONvalue.SetObject();
     JSONvalue.AddMember("bgimg", bgimg, a);

@@ -43,14 +43,6 @@ public class Serializable {
     return openpadJNI.Serializable_getJSONString(swigCPtr, this);
   }
 
-  public void setJSONvalue(SWIGTYPE_p_Value value) {
-    openpadJNI.Serializable_JSONvalue_set(swigCPtr, this, SWIGTYPE_p_Value.getCPtr(value));
-  }
-
-  public SWIGTYPE_p_Value getJSONvalue() {
-    return new SWIGTYPE_p_Value(openpadJNI.Serializable_JSONvalue_get(swigCPtr, this), true);
-  }
-
   public void setHasSerialized(boolean value) {
     openpadJNI.Serializable_hasSerialized_set(swigCPtr, this, value);
   }

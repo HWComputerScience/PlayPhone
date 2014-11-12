@@ -35,6 +35,14 @@ public class PadConfig extends Serializable {
     super.delete();
   }
 
+  public PadConfig() {
+    this(openpadJNI.new_PadConfig__SWIG_0(), true);
+  }
+
+  public PadConfig(PadConfig other) {
+    this(openpadJNI.new_PadConfig__SWIG_1(PadConfig.getCPtr(other), other), true);
+  }
+
   public SWIGTYPE_p_Value serializeJSON(SWIGTYPE_p_Document__AllocatorType a) {
     return new SWIGTYPE_p_Value(openpadJNI.PadConfig_serializeJSON(swigCPtr, this, SWIGTYPE_p_Document__AllocatorType.getCPtr(a)), false);
   }

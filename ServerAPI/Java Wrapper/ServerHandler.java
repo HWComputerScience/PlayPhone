@@ -35,6 +35,21 @@ public class ServerHandler {
     }
   }
 
+  protected void swigDirectorDisconnect() {
+    swigCMemOwn = false;
+    delete();
+  }
+
+  public void swigReleaseOwnership() {
+    swigCMemOwn = false;
+    openpadJNI.ServerHandler_change_ownership(this, swigCPtr, false);
+  }
+
+  public void swigTakeOwnership() {
+    swigCMemOwn = true;
+    openpadJNI.ServerHandler_change_ownership(this, swigCPtr, true);
+  }
+
   public void setServ(Server value) {
     openpadJNI.ServerHandler_serv_set(swigCPtr, this, Server.getCPtr(value), value);
   }
@@ -45,51 +60,52 @@ public class ServerHandler {
   }
 
   public void onStart() {
-    openpadJNI.ServerHandler_onStart(swigCPtr, this);
+    if (getClass() == ServerHandler.class) openpadJNI.ServerHandler_onStart(swigCPtr, this); else openpadJNI.ServerHandler_onStartSwigExplicitServerHandler(swigCPtr, this);
   }
 
-  public boolean canJoin(Client cli, SWIGTYPE_p_std__string why) {
-    return openpadJNI.ServerHandler_canJoin(swigCPtr, this, Client.getCPtr(cli), cli, SWIGTYPE_p_std__string.getCPtr(why));
+  public boolean canJoin(Client cli, java.lang.String[] why) {
+    return (getClass() == ServerHandler.class) ? openpadJNI.ServerHandler_canJoin(swigCPtr, this, Client.getCPtr(cli), cli, why) : openpadJNI.ServerHandler_canJoinSwigExplicitServerHandler(swigCPtr, this, Client.getCPtr(cli), cli, why);
   }
 
   public String getName() {
-    return openpadJNI.ServerHandler_getName(swigCPtr, this);
+    return (getClass() == ServerHandler.class) ? openpadJNI.ServerHandler_getName(swigCPtr, this) : openpadJNI.ServerHandler_getNameSwigExplicitServerHandler(swigCPtr, this);
   }
 
   public String getDesc() {
-    return openpadJNI.ServerHandler_getDesc(swigCPtr, this);
+    return (getClass() == ServerHandler.class) ? openpadJNI.ServerHandler_getDesc(swigCPtr, this) : openpadJNI.ServerHandler_getDescSwigExplicitServerHandler(swigCPtr, this);
   }
 
   public String getIconFilePath() {
-    return openpadJNI.ServerHandler_getIconFilePath(swigCPtr, this);
+    return (getClass() == ServerHandler.class) ? openpadJNI.ServerHandler_getIconFilePath(swigCPtr, this) : openpadJNI.ServerHandler_getIconFilePathSwigExplicitServerHandler(swigCPtr, this);
   }
 
   public int getFilledSlots() {
-    return openpadJNI.ServerHandler_getFilledSlots(swigCPtr, this);
+    return (getClass() == ServerHandler.class) ? openpadJNI.ServerHandler_getFilledSlots(swigCPtr, this) : openpadJNI.ServerHandler_getFilledSlotsSwigExplicitServerHandler(swigCPtr, this);
   }
 
   public int getOpenSlots() {
-    return openpadJNI.ServerHandler_getOpenSlots(swigCPtr, this);
+    return (getClass() == ServerHandler.class) ? openpadJNI.ServerHandler_getOpenSlots(swigCPtr, this) : openpadJNI.ServerHandler_getOpenSlotsSwigExplicitServerHandler(swigCPtr, this);
   }
 
   public void onJoin(Client cli) {
-    openpadJNI.ServerHandler_onJoin(swigCPtr, this, Client.getCPtr(cli), cli);
+    if (getClass() == ServerHandler.class) openpadJNI.ServerHandler_onJoin(swigCPtr, this, Client.getCPtr(cli), cli); else openpadJNI.ServerHandler_onJoinSwigExplicitServerHandler(swigCPtr, this, Client.getCPtr(cli), cli);
   }
 
   public PadConfig getDefaultControls() {
-    return new PadConfig(openpadJNI.ServerHandler_getDefaultControls(swigCPtr, this), true);
+    return new PadConfig((getClass() == ServerHandler.class) ? openpadJNI.ServerHandler_getDefaultControls(swigCPtr, this) : openpadJNI.ServerHandler_getDefaultControlsSwigExplicitServerHandler(swigCPtr, this), true);
   }
 
   public void onDisconnect(Client cli) {
-    openpadJNI.ServerHandler_onDisconnect(swigCPtr, this, Client.getCPtr(cli), cli);
+    if (getClass() == ServerHandler.class) openpadJNI.ServerHandler_onDisconnect(swigCPtr, this, Client.getCPtr(cli), cli); else openpadJNI.ServerHandler_onDisconnectSwigExplicitServerHandler(swigCPtr, this, Client.getCPtr(cli), cli);
   }
 
   public void onPadUpdate(Client cli, PadUpdateObject update) {
-    openpadJNI.ServerHandler_onPadUpdate(swigCPtr, this, Client.getCPtr(cli), cli, PadUpdateObject.getCPtr(update), update);
+    if (getClass() == ServerHandler.class) openpadJNI.ServerHandler_onPadUpdate(swigCPtr, this, Client.getCPtr(cli), cli, PadUpdateObject.getCPtr(update), update); else openpadJNI.ServerHandler_onPadUpdateSwigExplicitServerHandler(swigCPtr, this, Client.getCPtr(cli), cli, PadUpdateObject.getCPtr(update), update);
   }
 
   public ServerHandler() {
     this(openpadJNI.new_ServerHandler(), true);
+    openpadJNI.ServerHandler_director_connect(this, swigCPtr, swigCMemOwn, true);
   }
 
 }

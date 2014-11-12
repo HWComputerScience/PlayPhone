@@ -41,6 +41,7 @@ public class openpadJNI {
   public final static native long new_Client(long jarg1, int jarg2, long jarg3, Server jarg3_);
   public final static native void Client_send(long jarg1, Client jarg1_, long jarg2, Serializable jarg2_);
   public final static native void Client_run(long jarg1, Client jarg1_);
+  public final static native long Client_getID(long jarg1, Client jarg1_);
   public final static native void Client_setControls(long jarg1, Client jarg1_, long jarg2, ControlObject jarg2_);
   public final static native void Client_disconnect(long jarg1, Client jarg1_, long jarg2);
   public final static native void delete_Client(long jarg1);
@@ -56,14 +57,11 @@ public class openpadJNI {
   public final static native void Server_start(long jarg1, Server jarg1_);
   public final static native void Server_refreshClients(long jarg1, Server jarg1_);
   public final static native void Server_setControls(long jarg1, Server jarg1_, long jarg2, ControlObject jarg2_);
-  public final static native long Server_handleRequest(long jarg1, Server jarg1_, long jarg2, Request jarg2_, long jarg3, Client jarg3_);
   public final static native void Server_handleResponse(long jarg1, Server jarg1_, long jarg2, Response jarg2_, long jarg3, Client jarg3_);
   public final static native void delete_Server(long jarg1);
   public final static native String getStringFromJSON(long jarg1);
   public final static native long Serializable_serializeJSON(long jarg1, Serializable jarg1_, long jarg2);
   public final static native String Serializable_getJSONString(long jarg1, Serializable jarg1_);
-  public final static native void Serializable_JSONvalue_set(long jarg1, Serializable jarg1_, long jarg2);
-  public final static native long Serializable_JSONvalue_get(long jarg1, Serializable jarg1_);
   public final static native void Serializable_hasSerialized_set(long jarg1, Serializable jarg1_, boolean jarg2);
   public final static native boolean Serializable_hasSerialized_get(long jarg1, Serializable jarg1_);
   public final static native void delete_Serializable(long jarg1);
@@ -142,6 +140,8 @@ public class openpadJNI {
   public final static native String ControlObject_img_get(long jarg1, ControlObject jarg1_);
   public final static native long new_ControlObject();
   public final static native void delete_ControlObject(long jarg1);
+  public final static native long new_PadConfig__SWIG_0();
+  public final static native long new_PadConfig__SWIG_1(long jarg1, PadConfig jarg1_);
   public final static native long PadConfig_serializeJSON(long jarg1, PadConfig jarg1_, long jarg2);
   public final static native boolean PadConfig_parseJSON(long jarg1, PadConfig jarg1_, long jarg2);
   public final static native void PadConfig_addControl(long jarg1, PadConfig jarg1_, long jarg2, ControlObject jarg2_);
@@ -173,18 +173,31 @@ public class openpadJNI {
   public final static native void ServerHandler_serv_set(long jarg1, ServerHandler jarg1_, long jarg2, Server jarg2_);
   public final static native long ServerHandler_serv_get(long jarg1, ServerHandler jarg1_);
   public final static native void ServerHandler_onStart(long jarg1, ServerHandler jarg1_);
-  public final static native boolean ServerHandler_canJoin(long jarg1, ServerHandler jarg1_, long jarg2, Client jarg2_, long jarg3);
+  public final static native void ServerHandler_onStartSwigExplicitServerHandler(long jarg1, ServerHandler jarg1_);
+  public final static native boolean ServerHandler_canJoin(long jarg1, ServerHandler jarg1_, long jarg2, Client jarg2_, java.lang.String[] jarg3);
+  public final static native boolean ServerHandler_canJoinSwigExplicitServerHandler(long jarg1, ServerHandler jarg1_, long jarg2, Client jarg2_, java.lang.String[] jarg3);
   public final static native String ServerHandler_getName(long jarg1, ServerHandler jarg1_);
+  public final static native String ServerHandler_getNameSwigExplicitServerHandler(long jarg1, ServerHandler jarg1_);
   public final static native String ServerHandler_getDesc(long jarg1, ServerHandler jarg1_);
+  public final static native String ServerHandler_getDescSwigExplicitServerHandler(long jarg1, ServerHandler jarg1_);
   public final static native String ServerHandler_getIconFilePath(long jarg1, ServerHandler jarg1_);
+  public final static native String ServerHandler_getIconFilePathSwigExplicitServerHandler(long jarg1, ServerHandler jarg1_);
   public final static native int ServerHandler_getFilledSlots(long jarg1, ServerHandler jarg1_);
+  public final static native int ServerHandler_getFilledSlotsSwigExplicitServerHandler(long jarg1, ServerHandler jarg1_);
   public final static native int ServerHandler_getOpenSlots(long jarg1, ServerHandler jarg1_);
+  public final static native int ServerHandler_getOpenSlotsSwigExplicitServerHandler(long jarg1, ServerHandler jarg1_);
   public final static native void ServerHandler_onJoin(long jarg1, ServerHandler jarg1_, long jarg2, Client jarg2_);
+  public final static native void ServerHandler_onJoinSwigExplicitServerHandler(long jarg1, ServerHandler jarg1_, long jarg2, Client jarg2_);
   public final static native long ServerHandler_getDefaultControls(long jarg1, ServerHandler jarg1_);
+  public final static native long ServerHandler_getDefaultControlsSwigExplicitServerHandler(long jarg1, ServerHandler jarg1_);
   public final static native void ServerHandler_onDisconnect(long jarg1, ServerHandler jarg1_, long jarg2, Client jarg2_);
+  public final static native void ServerHandler_onDisconnectSwigExplicitServerHandler(long jarg1, ServerHandler jarg1_, long jarg2, Client jarg2_);
   public final static native void ServerHandler_onPadUpdate(long jarg1, ServerHandler jarg1_, long jarg2, Client jarg2_, long jarg3, PadUpdateObject jarg3_);
+  public final static native void ServerHandler_onPadUpdateSwigExplicitServerHandler(long jarg1, ServerHandler jarg1_, long jarg2, Client jarg2_, long jarg3, PadUpdateObject jarg3_);
   public final static native long new_ServerHandler();
   public final static native void delete_ServerHandler(long jarg1);
+  public final static native void ServerHandler_director_connect(ServerHandler obj, long cptr, boolean mem_own, boolean weak_global);
+  public final static native void ServerHandler_change_ownership(ServerHandler obj, long cptr, boolean take_or_release);
   public final static native long Request_SWIGUpcast(long jarg1);
   public final static native long Response_SWIGUpcast(long jarg1);
   public final static native long IDObject_SWIGUpcast(long jarg1);
@@ -195,4 +208,43 @@ public class openpadJNI {
   public final static native long ButtonControl_SWIGUpcast(long jarg1);
   public final static native long DPadControl_SWIGUpcast(long jarg1);
   public final static native long JoystickControl_SWIGUpcast(long jarg1);
+
+  public static void SwigDirector_ServerHandler_onStart(ServerHandler self) {
+    self.onStart();
+  }
+  public static boolean SwigDirector_ServerHandler_canJoin(ServerHandler self, long cli, long why) {
+    return self.canJoin((cli == 0) ? null : new Client(cli, false), new SWIGTYPE_p_std__string(why, false));
+  }
+  public static String SwigDirector_ServerHandler_getName(ServerHandler self) {
+    return self.getName();
+  }
+  public static String SwigDirector_ServerHandler_getDesc(ServerHandler self) {
+    return self.getDesc();
+  }
+  public static String SwigDirector_ServerHandler_getIconFilePath(ServerHandler self) {
+    return self.getIconFilePath();
+  }
+  public static int SwigDirector_ServerHandler_getFilledSlots(ServerHandler self) {
+    return self.getFilledSlots();
+  }
+  public static int SwigDirector_ServerHandler_getOpenSlots(ServerHandler self) {
+    return self.getOpenSlots();
+  }
+  public static void SwigDirector_ServerHandler_onJoin(ServerHandler self, long cli) {
+    self.onJoin((cli == 0) ? null : new Client(cli, false));
+  }
+  public static long SwigDirector_ServerHandler_getDefaultControls(ServerHandler self) {
+    return PadConfig.getCPtr(self.getDefaultControls());
+  }
+  public static void SwigDirector_ServerHandler_onDisconnect(ServerHandler self, long cli) {
+    self.onDisconnect((cli == 0) ? null : new Client(cli, false));
+  }
+  public static void SwigDirector_ServerHandler_onPadUpdate(ServerHandler self, long cli, long update) {
+    self.onPadUpdate((cli == 0) ? null : new Client(cli, false), new PadUpdateObject(update, false));
+  }
+
+  private final static native void swig_module_init();
+  static {
+    swig_module_init();
+  }
 }

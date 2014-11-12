@@ -282,6 +282,10 @@ void Client::run(){
     sock=NULL;
 }
 
+IDObject& Client::getID(){
+    return *clientID;
+}
+
 void Client::setControls(ControlObject& ctrls){
     Request r(4);
     Document d;

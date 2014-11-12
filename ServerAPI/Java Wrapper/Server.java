@@ -84,10 +84,6 @@ public class Server {
     openpadJNI.Server_setControls(swigCPtr, this, ControlObject.getCPtr(ctrls), ctrls);
   }
 
-  public Response handleRequest(Request r, Client cli) {
-    return new Response(openpadJNI.Server_handleRequest(swigCPtr, this, Request.getCPtr(r), r, Client.getCPtr(cli), cli), true);
-  }
-
   public void handleResponse(Response r, Client cli) {
     openpadJNI.Server_handleResponse(swigCPtr, this, Response.getCPtr(r), r, Client.getCPtr(cli), cli);
   }

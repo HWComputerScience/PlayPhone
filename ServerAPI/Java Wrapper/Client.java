@@ -107,6 +107,10 @@ public class Client {
     openpadJNI.Client_run(swigCPtr, this);
   }
 
+  public IDObject getID() {
+    return new IDObject(openpadJNI.Client_getID(swigCPtr, this), false);
+  }
+
   public void setControls(ControlObject ctrls) {
     openpadJNI.Client_setControls(swigCPtr, this, ControlObject.getCPtr(ctrls), ctrls);
   }
