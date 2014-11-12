@@ -17,7 +17,8 @@ public:
     void swig_connect_director(JNIEnv *jenv, jobject jself, jclass jcls, bool swig_mem_own, bool weak_global);
     SwigDirector_ServerHandler(JNIEnv *jenv);
     virtual void onStart();
-    virtual bool canJoin(openpad::Client *cli, std::string &why);
+    virtual bool canJoin(openpad::Client *cli);
+    virtual std::string whyIsBanned(openpad::Client *cli);
     virtual std::string getName();
     virtual std::string getDesc();
     virtual std::string getIconFilePath();
@@ -29,10 +30,10 @@ public:
     virtual void onPadUpdate(openpad::Client *cli, openpad::PadUpdateObject update);
 public:
     bool swig_overrides(int n) {
-      return (n < 11 ? swig_override[n] : false);
+      return (n < 12 ? swig_override[n] : false);
     }
 protected:
-    bool swig_override[11];
+    bool swig_override[12];
 };
 
 

@@ -51,10 +51,11 @@
 %include "../PlayPhone/openpad.h"
 %include "../PlayPhone/Server.h"
 %include "../PlayPhone/Request.h"
-//%include "../PlayPhone/ServerHandler.h"
 
 %feature("director") openpad::ServerHandler;
+%include "../PlayPhone/ServerHandler.h"
 
+/*
 namespace openpad {
     class ServerHandler{
     public:
@@ -75,3 +76,4 @@ namespace openpad {
     private:
     };
 }
+*/

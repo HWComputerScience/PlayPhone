@@ -598,7 +598,7 @@ namespace Swig {
 namespace Swig {
   namespace {
     jclass jclass_openpadJNI = NULL;
-    jmethodID director_methids[11];
+    jmethodID director_methids[12];
   }
 }
 
@@ -649,23 +649,21 @@ void SwigDirector_ServerHandler::onStart() {
   if (swigjobj) jenv->DeleteLocalRef(swigjobj);
 }
 
-bool SwigDirector_ServerHandler::canJoin(openpad::Client *cli, std::string &why) {
+bool SwigDirector_ServerHandler::canJoin(openpad::Client *cli) {
   bool c_result = SwigValueInit< bool >() ;
   jboolean jresult = 0 ;
   JNIEnvWrapper swigjnienv(this) ;
   JNIEnv * jenv = swigjnienv.getJNIEnv() ;
   jobject swigjobj = (jobject) NULL ;
   jlong jcli = 0 ;
-  jlong jwhy = 0 ;
   
   if (!swig_override[1]) {
-    return openpad::ServerHandler::canJoin(cli,why);
+    return openpad::ServerHandler::canJoin(cli);
   }
   swigjobj = swig_get_self(jenv);
   if (swigjobj && jenv->IsSameObject(swigjobj, NULL) == JNI_FALSE) {
     *((openpad::Client **)&jcli) = (openpad::Client *) cli; 
-    *(std::string **)&jwhy = (std::string *) &why; 
-    jresult = (jboolean) jenv->CallStaticBooleanMethod(Swig::jclass_openpadJNI, Swig::director_methids[1], swigjobj, jcli, jwhy);
+    jresult = (jboolean) jenv->CallStaticBooleanMethod(Swig::jclass_openpadJNI, Swig::director_methids[1], swigjobj, jcli);
     jthrowable swigerror = jenv->ExceptionOccurred();
     if (swigerror) {
       jenv->ExceptionClear();
@@ -680,6 +678,44 @@ bool SwigDirector_ServerHandler::canJoin(openpad::Client *cli, std::string &why)
   return c_result;
 }
 
+std::string SwigDirector_ServerHandler::whyIsBanned(openpad::Client *cli) {
+  std::string c_result ;
+  jstring jresult = 0 ;
+  JNIEnvWrapper swigjnienv(this) ;
+  JNIEnv * jenv = swigjnienv.getJNIEnv() ;
+  jobject swigjobj = (jobject) NULL ;
+  jlong jcli = 0 ;
+  
+  if (!swig_override[2]) {
+    return openpad::ServerHandler::whyIsBanned(cli);
+  }
+  swigjobj = swig_get_self(jenv);
+  if (swigjobj && jenv->IsSameObject(swigjobj, NULL) == JNI_FALSE) {
+    *((openpad::Client **)&jcli) = (openpad::Client *) cli; 
+    jresult = (jstring) jenv->CallStaticObjectMethod(Swig::jclass_openpadJNI, Swig::director_methids[2], swigjobj, jcli);
+    jthrowable swigerror = jenv->ExceptionOccurred();
+    if (swigerror) {
+      jenv->ExceptionClear();
+      throw Swig::DirectorException(jenv, swigerror);
+    }
+    
+    if(!jresult) {
+      if (!jenv->ExceptionCheck()) {
+        SWIG_JavaThrowException(jenv, SWIG_JavaNullPointerException, "null string");
+      }
+      return c_result;
+    } 
+    const char *c_result_pstr = (const char *)jenv->GetStringUTFChars(jresult, 0); 
+    if (!c_result_pstr) return c_result;
+    c_result.assign(c_result_pstr);
+    jenv->ReleaseStringUTFChars(jresult, c_result_pstr); 
+  } else {
+    SWIG_JavaThrowException(jenv, SWIG_JavaNullPointerException, "null upcall object in openpad::ServerHandler::whyIsBanned ");
+  }
+  if (swigjobj) jenv->DeleteLocalRef(swigjobj);
+  return c_result;
+}
+
 std::string SwigDirector_ServerHandler::getName() {
   std::string c_result ;
   jstring jresult = 0 ;
@@ -687,12 +723,12 @@ std::string SwigDirector_ServerHandler::getName() {
   JNIEnv * jenv = swigjnienv.getJNIEnv() ;
   jobject swigjobj = (jobject) NULL ;
   
-  if (!swig_override[2]) {
+  if (!swig_override[3]) {
     return openpad::ServerHandler::getName();
   }
   swigjobj = swig_get_self(jenv);
   if (swigjobj && jenv->IsSameObject(swigjobj, NULL) == JNI_FALSE) {
-    jresult = (jstring) jenv->CallStaticObjectMethod(Swig::jclass_openpadJNI, Swig::director_methids[2], swigjobj);
+    jresult = (jstring) jenv->CallStaticObjectMethod(Swig::jclass_openpadJNI, Swig::director_methids[3], swigjobj);
     jthrowable swigerror = jenv->ExceptionOccurred();
     if (swigerror) {
       jenv->ExceptionClear();
@@ -723,12 +759,12 @@ std::string SwigDirector_ServerHandler::getDesc() {
   JNIEnv * jenv = swigjnienv.getJNIEnv() ;
   jobject swigjobj = (jobject) NULL ;
   
-  if (!swig_override[3]) {
+  if (!swig_override[4]) {
     return openpad::ServerHandler::getDesc();
   }
   swigjobj = swig_get_self(jenv);
   if (swigjobj && jenv->IsSameObject(swigjobj, NULL) == JNI_FALSE) {
-    jresult = (jstring) jenv->CallStaticObjectMethod(Swig::jclass_openpadJNI, Swig::director_methids[3], swigjobj);
+    jresult = (jstring) jenv->CallStaticObjectMethod(Swig::jclass_openpadJNI, Swig::director_methids[4], swigjobj);
     jthrowable swigerror = jenv->ExceptionOccurred();
     if (swigerror) {
       jenv->ExceptionClear();
@@ -759,12 +795,12 @@ std::string SwigDirector_ServerHandler::getIconFilePath() {
   JNIEnv * jenv = swigjnienv.getJNIEnv() ;
   jobject swigjobj = (jobject) NULL ;
   
-  if (!swig_override[4]) {
+  if (!swig_override[5]) {
     return openpad::ServerHandler::getIconFilePath();
   }
   swigjobj = swig_get_self(jenv);
   if (swigjobj && jenv->IsSameObject(swigjobj, NULL) == JNI_FALSE) {
-    jresult = (jstring) jenv->CallStaticObjectMethod(Swig::jclass_openpadJNI, Swig::director_methids[4], swigjobj);
+    jresult = (jstring) jenv->CallStaticObjectMethod(Swig::jclass_openpadJNI, Swig::director_methids[5], swigjobj);
     jthrowable swigerror = jenv->ExceptionOccurred();
     if (swigerror) {
       jenv->ExceptionClear();
@@ -795,12 +831,12 @@ int SwigDirector_ServerHandler::getFilledSlots() {
   JNIEnv * jenv = swigjnienv.getJNIEnv() ;
   jobject swigjobj = (jobject) NULL ;
   
-  if (!swig_override[5]) {
+  if (!swig_override[6]) {
     return openpad::ServerHandler::getFilledSlots();
   }
   swigjobj = swig_get_self(jenv);
   if (swigjobj && jenv->IsSameObject(swigjobj, NULL) == JNI_FALSE) {
-    jresult = (jint) jenv->CallStaticIntMethod(Swig::jclass_openpadJNI, Swig::director_methids[5], swigjobj);
+    jresult = (jint) jenv->CallStaticIntMethod(Swig::jclass_openpadJNI, Swig::director_methids[6], swigjobj);
     jthrowable swigerror = jenv->ExceptionOccurred();
     if (swigerror) {
       jenv->ExceptionClear();
@@ -822,12 +858,12 @@ int SwigDirector_ServerHandler::getOpenSlots() {
   JNIEnv * jenv = swigjnienv.getJNIEnv() ;
   jobject swigjobj = (jobject) NULL ;
   
-  if (!swig_override[6]) {
+  if (!swig_override[7]) {
     return openpad::ServerHandler::getOpenSlots();
   }
   swigjobj = swig_get_self(jenv);
   if (swigjobj && jenv->IsSameObject(swigjobj, NULL) == JNI_FALSE) {
-    jresult = (jint) jenv->CallStaticIntMethod(Swig::jclass_openpadJNI, Swig::director_methids[6], swigjobj);
+    jresult = (jint) jenv->CallStaticIntMethod(Swig::jclass_openpadJNI, Swig::director_methids[7], swigjobj);
     jthrowable swigerror = jenv->ExceptionOccurred();
     if (swigerror) {
       jenv->ExceptionClear();
@@ -848,14 +884,14 @@ void SwigDirector_ServerHandler::onJoin(openpad::Client *cli) {
   jobject swigjobj = (jobject) NULL ;
   jlong jcli = 0 ;
   
-  if (!swig_override[7]) {
+  if (!swig_override[8]) {
     openpad::ServerHandler::onJoin(cli);
     return;
   }
   swigjobj = swig_get_self(jenv);
   if (swigjobj && jenv->IsSameObject(swigjobj, NULL) == JNI_FALSE) {
     *((openpad::Client **)&jcli) = (openpad::Client *) cli; 
-    jenv->CallStaticVoidMethod(Swig::jclass_openpadJNI, Swig::director_methids[7], swigjobj, jcli);
+    jenv->CallStaticVoidMethod(Swig::jclass_openpadJNI, Swig::director_methids[8], swigjobj, jcli);
     jthrowable swigerror = jenv->ExceptionOccurred();
     if (swigerror) {
       jenv->ExceptionClear();
@@ -876,12 +912,12 @@ openpad::PadConfig SwigDirector_ServerHandler::getDefaultControls() {
   jobject swigjobj = (jobject) NULL ;
   openpad::PadConfig *argp ;
   
-  if (!swig_override[8]) {
+  if (!swig_override[9]) {
     return openpad::ServerHandler::getDefaultControls();
   }
   swigjobj = swig_get_self(jenv);
   if (swigjobj && jenv->IsSameObject(swigjobj, NULL) == JNI_FALSE) {
-    jresult = (jlong) jenv->CallStaticLongMethod(Swig::jclass_openpadJNI, Swig::director_methids[8], swigjobj);
+    jresult = (jlong) jenv->CallStaticLongMethod(Swig::jclass_openpadJNI, Swig::director_methids[9], swigjobj);
     jthrowable swigerror = jenv->ExceptionOccurred();
     if (swigerror) {
       jenv->ExceptionClear();
@@ -907,14 +943,14 @@ void SwigDirector_ServerHandler::onDisconnect(openpad::Client *cli) {
   jobject swigjobj = (jobject) NULL ;
   jlong jcli = 0 ;
   
-  if (!swig_override[9]) {
+  if (!swig_override[10]) {
     openpad::ServerHandler::onDisconnect(cli);
     return;
   }
   swigjobj = swig_get_self(jenv);
   if (swigjobj && jenv->IsSameObject(swigjobj, NULL) == JNI_FALSE) {
     *((openpad::Client **)&jcli) = (openpad::Client *) cli; 
-    jenv->CallStaticVoidMethod(Swig::jclass_openpadJNI, Swig::director_methids[9], swigjobj, jcli);
+    jenv->CallStaticVoidMethod(Swig::jclass_openpadJNI, Swig::director_methids[10], swigjobj, jcli);
     jthrowable swigerror = jenv->ExceptionOccurred();
     if (swigerror) {
       jenv->ExceptionClear();
@@ -934,7 +970,7 @@ void SwigDirector_ServerHandler::onPadUpdate(openpad::Client *cli, openpad::PadU
   jlong jcli = 0 ;
   jlong jupdate  ;
   
-  if (!swig_override[10]) {
+  if (!swig_override[11]) {
     openpad::ServerHandler::onPadUpdate(cli,update);
     return;
   }
@@ -943,7 +979,7 @@ void SwigDirector_ServerHandler::onPadUpdate(openpad::Client *cli, openpad::PadU
     *((openpad::Client **)&jcli) = (openpad::Client *) cli; 
     jupdate = 0;
     *((openpad::PadUpdateObject **)&jupdate) = &update; 
-    jenv->CallStaticVoidMethod(Swig::jclass_openpadJNI, Swig::director_methids[10], swigjobj, jcli, jupdate);
+    jenv->CallStaticVoidMethod(Swig::jclass_openpadJNI, Swig::director_methids[11], swigjobj, jcli, jupdate);
     jthrowable swigerror = jenv->ExceptionOccurred();
     if (swigerror) {
       jenv->ExceptionClear();
@@ -966,7 +1002,10 @@ void SwigDirector_ServerHandler::swig_connect_director(JNIEnv *jenv, jobject jse
       "onStart", "()V", NULL 
     },
     {
-      "canJoin", "(Lcom/openpad/server/Client;Lcom/openpad/server/SWIGTYPE_p_std__string;)Z", NULL 
+      "canJoin", "(Lcom/openpad/server/Client;)Z", NULL 
+    },
+    {
+      "whyIsBanned", "(Lcom/openpad/server/Client;)Ljava/lang/String;", NULL 
     },
     {
       "getName", "()Ljava/lang/String;", NULL 
@@ -1006,7 +1045,7 @@ void SwigDirector_ServerHandler::swig_connect_director(JNIEnv *jenv, jobject jse
       baseclass = (jclass) jenv->NewGlobalRef(baseclass);
     }
     bool derived = (jenv->IsSameObject(baseclass, jcls) ? false : true);
-    for (int i = 0; i < 11; ++i) {
+    for (int i = 0; i < 12; ++i) {
       if (!methods[i].base_methid) {
         methods[i].base_methid = jenv->GetMethodID(baseclass, methods[i].mname, methods[i].mdesc);
         if (!methods[i].base_methid) return;
@@ -3519,12 +3558,10 @@ SWIGEXPORT void JNICALL Java_com_openpad_server_openpadJNI_ServerHandler_1onStar
 }
 
 
-SWIGEXPORT jboolean JNICALL Java_com_openpad_server_openpadJNI_ServerHandler_1canJoin(JNIEnv *jenv, jclass jcls, jlong jarg1, jobject jarg1_, jlong jarg2, jobject jarg2_, jobjectArray jarg3) {
+SWIGEXPORT jboolean JNICALL Java_com_openpad_server_openpadJNI_ServerHandler_1canJoin(JNIEnv *jenv, jclass jcls, jlong jarg1, jobject jarg1_, jlong jarg2, jobject jarg2_) {
   jboolean jresult = 0 ;
   openpad::ServerHandler *arg1 = (openpad::ServerHandler *) 0 ;
   openpad::Client *arg2 = (openpad::Client *) 0 ;
-  std::string *arg3 = 0 ;
-  std::string strTemp3 ;
   bool result;
   
   (void)jenv;
@@ -3533,45 +3570,16 @@ SWIGEXPORT jboolean JNICALL Java_com_openpad_server_openpadJNI_ServerHandler_1ca
   (void)jarg2_;
   arg1 = *(openpad::ServerHandler **)&jarg1; 
   arg2 = *(openpad::Client **)&jarg2; 
-  {
-    if (!jarg3) {
-      SWIG_JavaThrowException(jenv, SWIG_JavaNullPointerException, "array null");
-      return 0;
-    }
-    if (jenv->GetArrayLength(jarg3) == 0) {
-      SWIG_JavaThrowException(jenv, SWIG_JavaIndexOutOfBoundsException, "Array must contain at least 1 element");
-      return 0;
-    }
-    
-    jobject oInput = jenv->GetObjectArrayElement(jarg3, 0); 
-    if ( NULL != oInput ) {
-      jstring sInput = static_cast<jstring>( oInput );
-      
-      const char * arg3_pstr = (const char *)jenv->GetStringUTFChars(sInput, 0); 
-      if (!arg3_pstr) return 0;
-      strTemp3.assign( arg3_pstr );
-      jenv->ReleaseStringUTFChars( sInput, arg3_pstr);  
-    }
-    
-    arg3 = &strTemp3;
-  }
-  result = (bool)(arg1)->canJoin(arg2,*arg3);
+  result = (bool)(arg1)->canJoin(arg2);
   jresult = (jboolean)result; 
-  {
-    jstring jStrTemp = jenv->NewStringUTF( strTemp3.c_str() );
-    jenv->SetObjectArrayElement(jarg3, 0, jStrTemp); 
-  }
-  
   return jresult;
 }
 
 
-SWIGEXPORT jboolean JNICALL Java_com_openpad_server_openpadJNI_ServerHandler_1canJoinSwigExplicitServerHandler(JNIEnv *jenv, jclass jcls, jlong jarg1, jobject jarg1_, jlong jarg2, jobject jarg2_, jobjectArray jarg3) {
+SWIGEXPORT jboolean JNICALL Java_com_openpad_server_openpadJNI_ServerHandler_1canJoinSwigExplicitServerHandler(JNIEnv *jenv, jclass jcls, jlong jarg1, jobject jarg1_, jlong jarg2, jobject jarg2_) {
   jboolean jresult = 0 ;
   openpad::ServerHandler *arg1 = (openpad::ServerHandler *) 0 ;
   openpad::Client *arg2 = (openpad::Client *) 0 ;
-  std::string *arg3 = 0 ;
-  std::string strTemp3 ;
   bool result;
   
   (void)jenv;
@@ -3580,35 +3588,44 @@ SWIGEXPORT jboolean JNICALL Java_com_openpad_server_openpadJNI_ServerHandler_1ca
   (void)jarg2_;
   arg1 = *(openpad::ServerHandler **)&jarg1; 
   arg2 = *(openpad::Client **)&jarg2; 
-  {
-    if (!jarg3) {
-      SWIG_JavaThrowException(jenv, SWIG_JavaNullPointerException, "array null");
-      return 0;
-    }
-    if (jenv->GetArrayLength(jarg3) == 0) {
-      SWIG_JavaThrowException(jenv, SWIG_JavaIndexOutOfBoundsException, "Array must contain at least 1 element");
-      return 0;
-    }
-    
-    jobject oInput = jenv->GetObjectArrayElement(jarg3, 0); 
-    if ( NULL != oInput ) {
-      jstring sInput = static_cast<jstring>( oInput );
-      
-      const char * arg3_pstr = (const char *)jenv->GetStringUTFChars(sInput, 0); 
-      if (!arg3_pstr) return 0;
-      strTemp3.assign( arg3_pstr );
-      jenv->ReleaseStringUTFChars( sInput, arg3_pstr);  
-    }
-    
-    arg3 = &strTemp3;
-  }
-  result = (bool)(arg1)->openpad::ServerHandler::canJoin(arg2,*arg3);
+  result = (bool)(arg1)->openpad::ServerHandler::canJoin(arg2);
   jresult = (jboolean)result; 
-  {
-    jstring jStrTemp = jenv->NewStringUTF( strTemp3.c_str() );
-    jenv->SetObjectArrayElement(jarg3, 0, jStrTemp); 
-  }
+  return jresult;
+}
+
+
+SWIGEXPORT jstring JNICALL Java_com_openpad_server_openpadJNI_ServerHandler_1whyIsBanned(JNIEnv *jenv, jclass jcls, jlong jarg1, jobject jarg1_, jlong jarg2, jobject jarg2_) {
+  jstring jresult = 0 ;
+  openpad::ServerHandler *arg1 = (openpad::ServerHandler *) 0 ;
+  openpad::Client *arg2 = (openpad::Client *) 0 ;
+  std::string result;
   
+  (void)jenv;
+  (void)jcls;
+  (void)jarg1_;
+  (void)jarg2_;
+  arg1 = *(openpad::ServerHandler **)&jarg1; 
+  arg2 = *(openpad::Client **)&jarg2; 
+  result = (arg1)->whyIsBanned(arg2);
+  jresult = jenv->NewStringUTF((&result)->c_str()); 
+  return jresult;
+}
+
+
+SWIGEXPORT jstring JNICALL Java_com_openpad_server_openpadJNI_ServerHandler_1whyIsBannedSwigExplicitServerHandler(JNIEnv *jenv, jclass jcls, jlong jarg1, jobject jarg1_, jlong jarg2, jobject jarg2_) {
+  jstring jresult = 0 ;
+  openpad::ServerHandler *arg1 = (openpad::ServerHandler *) 0 ;
+  openpad::Client *arg2 = (openpad::Client *) 0 ;
+  std::string result;
+  
+  (void)jenv;
+  (void)jcls;
+  (void)jarg1_;
+  (void)jarg2_;
+  arg1 = *(openpad::ServerHandler **)&jarg1; 
+  arg2 = *(openpad::Client **)&jarg2; 
+  result = (arg1)->openpad::ServerHandler::whyIsBanned(arg2);
+  jresult = jenv->NewStringUTF((&result)->c_str()); 
   return jresult;
 }
 
@@ -4023,12 +4040,15 @@ SWIGEXPORT void JNICALL Java_com_openpad_server_openpadJNI_swig_1module_1init(JN
   static struct {
     const char *method;
     const char *signature;
-  } methods[11] = {
+  } methods[12] = {
     {
       "SwigDirector_ServerHandler_onStart", "(Lcom/openpad/server/ServerHandler;)V" 
     },
     {
-      "SwigDirector_ServerHandler_canJoin", "(Lcom/openpad/server/ServerHandler;JJ)Z" 
+      "SwigDirector_ServerHandler_canJoin", "(Lcom/openpad/server/ServerHandler;J)Z" 
+    },
+    {
+      "SwigDirector_ServerHandler_whyIsBanned", "(Lcom/openpad/server/ServerHandler;J)Ljava/lang/String;" 
     },
     {
       "SwigDirector_ServerHandler_getName", "(Lcom/openpad/server/ServerHandler;)Ljava/lang/String;" 
