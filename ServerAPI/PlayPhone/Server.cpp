@@ -93,20 +93,25 @@ void Server::handleClient(TCPSocket* sock){
 }
 
 bool Server::send(Serializable &s, int clientID){
+    mut.lock();
     map<int, Client&>::iterator it = clients.find(clientID);
     if(it!=clients.end()){
         it->second.send(s);
+        mut.unlock();
         return true;
     }
+    mut.unlock();
     return false;
 }
 
 void Server::broadcast(Serializable &s, int except){
+    mut.lock();
     for(map<int, Client&>::iterator it = clients.begin(); it != clients.end(); ++it){
         if(it->first != except){
             it->second.send(s);
         }
     }
+    mut.unlock();
 }
 
 void Server::refreshClients(){
