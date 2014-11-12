@@ -157,7 +157,10 @@ Response Server::handleRequest(Request &r, Client* cli){
             Value banned;
             banned.SetObject();
             string why;
-            bool is = !handler.canJoin(cli, why);
+            bool is = !handler.canJoin(cli);
+            if(is){
+                why = handler.whyIsBanned(cli);
+            }
             banned.AddMember("is", is, d.GetAllocator());
             banned.AddMember("why", why, d.GetAllocator());
             obj.AddMember("banned", banned, d.GetAllocator());
@@ -165,8 +168,7 @@ Response Server::handleRequest(Request &r, Client* cli){
             return resp;
         }else if(r.operation==2){
             //Join Request
-            string why;
-            bool canJoin = cli->clientID!=nullptr && !cli->hasJoined && handler.getOpenSlots()>0 && handler.canJoin(cli, why);
+            bool canJoin = cli->clientID!=nullptr && !cli->hasJoined && handler.getOpenSlots()>0 && handler.canJoin(cli);
             
             Response resp(200,"OK");
             Document d;

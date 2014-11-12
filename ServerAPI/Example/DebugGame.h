@@ -22,7 +22,8 @@ public:
     
     //Override Methods
     void onStart();
-    bool canJoin(Client* cli, string& why);
+    virtual bool canJoin(Client* cli);
+    virtual string whyIsBanned(Client* cli);
     string getName();
     string getDesc();
     int getFilledSlots();

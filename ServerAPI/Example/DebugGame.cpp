@@ -19,13 +19,19 @@ void DebugGame::onStart(){
     printf("Game started\n");
 }
 
-bool DebugGame::canJoin(Client *cli, string &why){
+bool DebugGame::canJoin(Client *cli){
     if(cli->clientID->firstname == "Christian"){
-        why = "Get outta here Christian";
         return false;
     }else{
         return true;
     }
+}
+
+string DebugGame::whyIsBanned(openpad::Client *cli){
+    if(cli->getID().firstname == "Christian"){
+        return "Get outta here Christian";
+    }
+    return "";
 }
 
 string DebugGame::getName(){
