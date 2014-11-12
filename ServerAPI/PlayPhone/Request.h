@@ -37,6 +37,7 @@ namespace openpad {
         bool parseJSON(const char* json);
         Value& serializeJSON(Document::AllocatorType& a);
     private:
+        Request(Request& other){}
     };
     
     class Response : public Serializable{
@@ -51,6 +52,7 @@ namespace openpad {
         bool parseJSON(const char* json);
         Value& serializeJSON(Document::AllocatorType& a);
     private:
+        Response(Response& r){}
     };
     
     class IDObject : public Serializable{
@@ -105,6 +107,7 @@ namespace openpad {
         
         vector<ControlObject*> controls;
         string bgimg;
+    private:
     };
     
     class PadUpdateObject{

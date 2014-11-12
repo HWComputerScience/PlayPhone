@@ -5,6 +5,7 @@
 
 %feature("directors");
 
+#include "../PlayPhone/openpad.h"
 %include "std_string.i"
 %include "std_vector.i"
 #include <string>
@@ -49,7 +50,48 @@
 %include "../PlayPhone/openpad.h"
 %include "../PlayPhone/Server.h"
 %include "../PlayPhone/Request.h"
-//%include "../PlayPhone/ServerHandler.h"
+%include "../PlayPhone/ServerHandler.h"
+
+/*
+namespace openpad {
+    
+    class Client;
+    class Server;
+    class Serializable;
+    class ServerHandler;
+    class IDObject;
+    class GameObject;
+    class ControlObject;
+    
+    void sendMsg(TCPSocket* sock, Serializable& r);
+    
+    class Client {
+        
+    public:
+        int socketID;
+        void* userData;
+        bool shouldRun, hasJoined;
+        shared_ptr<IDObject> clientID;
+        
+        Client(TCPSocket* sock, int sockID, Server* serv);
+        void run();
+        void setControls(ControlObject& ctrls);
+        void disconnect(string msg);
+    };
+    
+    class Server {
+        
+    public:
+        bool shouldRun;
+        ServerHandler& handler;
+        
+        Server(ServerHandler& handler);
+        void start();
+        void refreshClients();
+        void setControls(ControlObject& ctrls);
+    };
+    
+}
 
 namespace openpad {
     class ServerHandler{
@@ -70,5 +112,71 @@ namespace openpad {
         virtual void onPadUpdate(Client* cli, PadUpdateObject update);
     private:
     };
-    
 }
+
+namespace openpad {
+    
+    const char* getStringFromJSON(Value& v);
+    
+    class Serializable;
+    
+    class IDObject : public Serializable{
+    public:
+        IDObject();
+        
+        string phoneid;
+        string firstname;
+        string lastname;
+        string username;
+        string fbuid;
+    };
+    
+    class FrameObject : public Serializable{
+    public:
+        void set(float x, float y, float w, float h);
+        
+        double x,y,w,h;
+    };
+    
+    class ControlObject : public Serializable{
+    public:
+        int type;
+        FrameObject frame;
+        int controlID;
+        string img;
+    };
+    
+    class PadConfig : public Serializable{
+    public:
+        void addControl(ControlObject* c);
+        
+        string bgimg;
+    private:
+        PadConfig(PadConfig& other){}
+    };
+    
+    class PadUpdateObject{
+    public:
+        int x,y,controlid,action;
+    };
+    
+    class ButtonControl : public ControlObject{
+    public:
+        ButtonControl(float x, float y, float w, int controlid, int btntype);
+        
+        int btntype;
+    };
+    
+    class DPadControl : public ControlObject{
+    public:
+        DPadControl(float x, float y, float w, int controlid);
+        
+    };
+    
+    class JoystickControl : public ControlObject{
+    public:
+        JoystickControl(float x, float y, float w, int controlid);
+        
+    };
+}
+*/
