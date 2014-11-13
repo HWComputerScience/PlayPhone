@@ -54,26 +54,3 @@
 
 %feature("director") openpad::ServerHandler;
 %include "../PlayPhone/ServerHandler.h"
-
-/*
-namespace openpad {
-    class ServerHandler{
-    public:
-        Server* serv;
-        
-        virtual void onStart();
-        %apply std::string &INOUT { std::string & why };
-        virtual bool canJoin(Client* cli, string& why);
-        virtual string getName();
-        virtual string getDesc();
-        virtual string getIconFilePath();
-        virtual int getFilledSlots();
-        virtual int getOpenSlots();
-        virtual void onJoin(Client* cli);
-        virtual PadConfig getDefaultControls();
-        virtual void onDisconnect(Client* cli);
-        virtual void onPadUpdate(Client* cli, PadUpdateObject update);
-    private:
-    };
-}
-*/
