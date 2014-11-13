@@ -60,11 +60,11 @@ void DebugGame::onJoin(Client *cli){
 
 PadConfig DebugGame::getDefaultControls(){
     PadConfig conf;
-    ButtonControl *btn1 = new ButtonControl(.5, .5, .25, 0, BUTTON_A);
-    DPadControl *dpad = new DPadControl(0, 0, .2, 1);
+    ButtonControl *btn1 = new ButtonControl(.2, .2, .1, 0, BUTTON_A);
+    DPadControl *dpad = new DPadControl(.5, .75, .2, 1);
     
-    conf.controls.push_back(btn1);
-    conf.controls.push_back(dpad);
+    conf.addControl(btn1);
+    conf.addControl(dpad);
     
     return conf;
 }
@@ -75,5 +75,5 @@ void DebugGame::onDisconnect(Client *cli){
 
 void DebugGame::onPadUpdate(Client *cli, PadUpdateObject update){
     //Player controller action
-    printf("Player did something with controll %d\n", update.controlid);
+    printf("Player did something with control %d\n", update.controlid);
 }

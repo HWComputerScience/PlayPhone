@@ -250,8 +250,8 @@ bool PadUpdateObject::parseJSON(Value &v){
         action = v["action"].GetInt();
         controlid = v["controlid"].GetInt();
         Value& pos = v["position"];
-        x = pos["x"].GetInt();
-        y = pos["y"].GetInt();
+        x = pos["x"].GetDouble();
+        y = pos["y"].GetDouble();
         
         return true;
     } catch (exception ex) {
@@ -274,7 +274,7 @@ Value& ButtonControl::serializeJSON(Document::AllocatorType &a){
 }
 
 DPadControl::DPadControl(float x, float y, float w, int _controlid){
-    this->type = BUTTON;
+    this->type = DPAD;
     frame.set(x, y, w, w);
     controlID = _controlid;
 }

@@ -116,7 +116,8 @@ namespace openpad {
     public:
         bool parseJSON(Value& v);
         
-        int x,y,controlid,action;
+        int controlid,action;
+        float x,y;
     };
     
     class ButtonControl : public ControlObject{

@@ -204,8 +204,11 @@ Response Server::handleRequest(Request &r, Client* cli){
             Response resp(200,"OK");
             if(cli->hasJoined){
                 PadUpdateObject update;
-                update.parseJSON(*r.root);
-                
+                if(update.parseJSON(*r.root)){
+                    handler.onPadUpdate(cli, update);
+                }else{
+                    resp.statusMsg = "Bad padupdate JSON";
+                }
             }else{
                 Document d;
                 Value& obj = resp.serializeJSON(d.GetAllocator());
