@@ -12,8 +12,12 @@ using namespace openpad;
 
 void ServerHandler::onStart(){}
 
-bool ServerHandler::canJoin(Client *cli, string &why){
+bool ServerHandler::canJoin(Client *cli){
     return true;
+}
+
+string ServerHandler::whyIsBanned(openpad::Client *cli){
+    return "";
 }
 
 string ServerHandler::getName(){

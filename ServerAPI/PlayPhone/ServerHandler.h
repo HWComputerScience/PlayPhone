@@ -24,7 +24,8 @@ namespace openpad {
         Server* serv;
         
         virtual void onStart();
-        virtual bool canJoin(Client* cli, string& why);
+        virtual bool canJoin(Client* cli);
+        virtual string whyIsBanned(Client* cli);
         virtual string getName();
         virtual string getDesc();
         virtual string getIconFilePath();
