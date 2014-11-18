@@ -93,20 +93,25 @@ void Server::handleClient(TCPSocket* sock){
 }
 
 bool Server::send(Serializable &s, int clientID){
+    mut.lock();
     map<int, Client&>::iterator it = clients.find(clientID);
     if(it!=clients.end()){
         it->second.send(s);
+        mut.unlock();
         return true;
     }
+    mut.unlock();
     return false;
 }
 
 void Server::broadcast(Serializable &s, int except){
+    mut.lock();
     for(map<int, Client&>::iterator it = clients.begin(); it != clients.end(); ++it){
         if(it->first != except){
             it->second.send(s);
         }
     }
+    mut.unlock();
 }
 
 void Server::refreshClients(){
@@ -157,7 +162,10 @@ Response Server::handleRequest(Request &r, Client* cli){
             Value banned;
             banned.SetObject();
             string why;
-            bool is = !handler.canJoin(cli, why);
+            bool is = !handler.canJoin(cli);
+            if(is){
+                why = handler.whyIsBanned(cli);
+            }
             banned.AddMember("is", is, d.GetAllocator());
             banned.AddMember("why", why, d.GetAllocator());
             obj.AddMember("banned", banned, d.GetAllocator());
@@ -165,8 +173,7 @@ Response Server::handleRequest(Request &r, Client* cli){
             return resp;
         }else if(r.operation==2){
             //Join Request
-            string why;
-            bool canJoin = cli->clientID!=nullptr && !cli->hasJoined && handler.getOpenSlots()>0 && handler.canJoin(cli, why);
+            bool canJoin = cli->clientID!=nullptr && !cli->hasJoined && handler.getOpenSlots()>0 && handler.canJoin(cli);
             
             Response resp(200,"OK");
             Document d;
@@ -197,8 +204,11 @@ Response Server::handleRequest(Request &r, Client* cli){
             Response resp(200,"OK");
             if(cli->hasJoined){
                 PadUpdateObject update;
-                update.parseJSON(*r.root);
-                
+                if(update.parseJSON(*r.root)){
+                    handler.onPadUpdate(cli, update);
+                }else{
+                    resp.statusMsg = "Bad padupdate JSON";
+                }
             }else{
                 Document d;
                 Value& obj = resp.serializeJSON(d.GetAllocator());
@@ -280,6 +290,10 @@ void Client::run(){
     serv->clients.erase(serv->clients.find(socketID));
     delete sock;
     sock=NULL;
+}
+
+IDObject& Client::getID(){
+    return *clientID;
 }
 
 void Client::setControls(ControlObject& ctrls){

@@ -99,18 +99,25 @@ namespace openpad {
     
     class PadConfig : public Serializable{
     public:
+        PadConfig();
+        PadConfig(const PadConfig& other);
+        PadConfig& operator=(const PadConfig& other);
+        
         Value& serializeJSON(Document::AllocatorType& a);
         bool parseJSON(Value& v);
+        void addControl(ControlObject* c);
         
         vector<ControlObject*> controls;
         string bgimg;
+    private:
     };
     
     class PadUpdateObject{
     public:
         bool parseJSON(Value& v);
         
-        int x,y,controlid,action;
+        int controlid,action;
+        float x,y;
     };
     
     class ButtonControl : public ControlObject{

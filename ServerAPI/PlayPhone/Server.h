@@ -42,6 +42,7 @@ namespace openpad {
         Client(TCPSocket* sock, int sockID, Server* serv);
         void send(Serializable &s);
         void run();
+        IDObject& getID();
         void setControls(ControlObject& ctrls);
         void disconnect(string msg);
     private:
